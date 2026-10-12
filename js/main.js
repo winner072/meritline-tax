@@ -4,7 +4,7 @@
    They appear on every page automatically.
    ===================================================================== */
 const SETTINGS = {
-  email: "",          // e.g. "info@meritlinetax.com"
+  email: "info@meritlinetaxservices.com",
   phone: "+44 7520659818",          // how your number should appear, e.g. "+44 7520659818"
   whatsapp: "447520659818",       // same number, digits only with country code, e.g. "447520659818"
   hours: "Monday to Friday, 7:00 AM to 5:00 PM GMT",   // your business hours, shown on every page
