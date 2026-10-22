@@ -10,6 +10,7 @@ const SETTINGS = {
   hours: "Monday to Friday, 7:00 AM to 5:00 PM GMT",   // your business hours, shown on every page
   formEndpoint: "https://formspree.io/f/mrpeyvzn",   // your Formspree form URL, e.g. "https://formspree.io/f/mrpeyvzn"
   bookingUrl: "https://calendly.com/winnermwn/30min",     // your Calendly (or similar) link for the free 20-minute call
+  analyticsId: "G-T31R5VJ5VD",   // your Google Analytics measurement ID (leave empty to switch analytics off)
   uploadUrl: "",      // your secure document upload / client portal link
   ptin: "",           // your PTIN once issued, e.g. "P01234567"
   payments: "",       // e.g. "Card, bank transfer, or Wise"
@@ -581,7 +582,7 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
     msg.textContent = "Sending…";
     try {
       const r = await fetch(SETTINGS.formEndpoint, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } }); if (!r.ok) throw 0;
-      form.reset(); msg.textContent = "You are on the list. We will remind you before your deadline.";
+      if (window.gtag) gtag("event", "reminder_signup"); form.reset(); msg.textContent = "You are on the list. We will remind you before your deadline.";
     } catch (_) { msg.textContent = "That did not go through. Please try again, or message us by email or WhatsApp."; }
   });
 })();
@@ -601,7 +602,7 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
     msg.textContent = "Sending…";
     try {
       const r = await fetch(SETTINGS.formEndpoint, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } }); if (!r.ok) throw 0;
-      form.reset(); msg.textContent = "Thank you. Your quote request has been received and we will reply shortly.";
+      if (window.gtag) gtag("event", "generate_lead", { form: "quote" }); form.reset(); msg.textContent = "Thank you. Your quote request has been received and we will reply shortly.";
     } catch (_) { msg.textContent = "Your request could not be sent. Please try again, or contact us directly by email or WhatsApp."; }
   });
 })();
@@ -635,4 +636,28 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
   const bar = $("mBar"), hero = document.querySelector(".hero, .page-hero"); if (!bar || !hero) return;
   const upd = () => bar.classList.toggle("show", window.scrollY > hero.offsetHeight - 160);
   window.addEventListener("scroll", upd, { passive: true }); upd();
+})();
+
+/* ---------- Google Analytics ---------- */
+(function () {
+  const id = SETTINGS.analyticsId; if (!id) return;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  /* No advertising use anywhere. Visitors in the EEA, UK and Switzerland are not tracked with cookies. */
+  gtag("consent", "default", { ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied", analytics_storage: "granted" });
+  gtag("consent", "default", { analytics_storage: "denied", region: ["AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU","IE","IT","LV","LT","LU","MT","NL","PL","PT","RO","SK","SI","ES","SE","IS","LI","NO","GB","CH"] });
+  gtag("js", new Date());
+  gtag("config", id);
+  const s = document.createElement("script"); s.async = true;
+  s.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(id);
+  document.head.appendChild(s);
+  /* Count clicks on email, WhatsApp and booking links as contact attempts. */
+  document.addEventListener("click", e => {
+    const a = e.target.closest && e.target.closest("a[href]"); if (!a) return;
+    const h = a.href; let ev = "";
+    if (h.indexOf("mailto:") === 0) ev = "email_click";
+    else if (h.indexOf("wa.me/") > -1) ev = "whatsapp_click";
+    else if (h.indexOf("calendly.com") > -1) ev = "book_call_click";
+    if (ev) gtag("event", ev, { link_url: h, page_path: location.pathname });
+  }, true);
 })();
