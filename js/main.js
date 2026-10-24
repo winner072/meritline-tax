@@ -17,7 +17,7 @@ const SETTINGS = {
   team: [             // more team members. Put each photo in the images folder.
     // { name: "Jane Doe, CPA", role: "Reviewing CPA (Ohio)", photo: "images/jane.jpg" }
   ],
-  linkedin: "",       // your LinkedIn page link, e.g. "https://www.linkedin.com/company/meritline-tax"
+  linkedin: "https://www.linkedin.com/in/mmesoma-winner-516109437/",       // your LinkedIn page link, e.g. "https://www.linkedin.com/company/meritline-tax"
   reviewUrl: "",      // your Trustpilot (or other) review page link
   reviews: [          // real client reviews only, with permission
     // { text: "Meritline filed three years of Form 5472 for my LLC quickly.", name: "Adaeze O.", place: "Lagos, Nigeria" }
