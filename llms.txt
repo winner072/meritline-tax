@@ -25,6 +25,7 @@
 
 ## Core guides
 
+- [U.S. LLC Tax Glossary for Foreign Owners](https://meritlinetaxservices.com/blog/us-llc-tax-glossary.html): plain-English definitions of 52 terms, from Form 5472 and disregarded entity to ECI, FBAR, and franchise tax
 - [Form 5472 Explained: The Complete Guide for Foreign Owners of U.S. LLCs](https://meritlinetaxservices.com/blog/form-5472-explained.html): who must file, reportable transactions, what each part asks, filing by fax, penalties, common mistakes
 - [Form 5472 Deadline 2026 and 2027](https://meritlinetaxservices.com/blog/form-5472-deadline-2026-2027.html): the 2026 tax year return is due April 15, 2027, or October 15, 2027 with Form 7004
 - [Form 5472 Extension: How to File Form 7004 for a Foreign-Owned LLC](https://meritlinetaxservices.com/blog/form-5472-extension-form-7004.html): foreign-owned LLCs fax Form 7004 to 855-887-7737 or mail it to the dedicated Ogden, Utah address
