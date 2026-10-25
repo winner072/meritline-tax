@@ -698,6 +698,7 @@ section{padding-block:56px}
 .aside-box.dark h3{color:#fff}
 .aside-box.dark p.big{color:#3DA0FF}
 .aside-box .btn-primary{color:#fff}
+.article .btn-primary,.prose .btn-primary{color:#fff}
 .aside-box h3{font-size:17px;margin-bottom:8px}
 .aside-box p{font-size:14.5px;color:var(--muted);margin-bottom:14px}
 .aside-box .big{font-family:var(--display);font-size:clamp(24px,2.4vw,34px);font-weight:800;color:#3DA0FF;line-height:1;margin-bottom:6px}
