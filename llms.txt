@@ -1,0 +1,60 @@
+# Meritline Tax Services
+
+> Meritline Tax Services is an online U.S. tax compliance service for people outside the United States who own a U.S. LLC. It prepares and files Form 5472 with the pro forma Form 1120 for foreign-owned single-member LLCs, state annual reports and state tax returns, Form 7004 extensions, FBAR (FinCEN Form 114), and catch-up filings with reasonable cause statements for missed years. Clients in any country are served fully online by email and WhatsApp, with a fixed written quote before any work begins.
+
+- Website: https://meritlinetaxservices.com/
+- Email: info@meritlinetaxservices.com
+- WhatsApp: +44 7520659818
+- Hours: Monday to Friday, 7:00 AM to 5:00 PM GMT
+- Managing Director: Mmesoma Winner (https://www.linkedin.com/in/mmesoma-winner-516109437/)
+- Meritline Tax Services is independent and is not affiliated with the IRS or any government agency. Website content is general information, not tax or legal advice.
+
+## Services and starting prices (USD)
+
+- [Form 5472 and Pro Forma Form 1120](https://meritlinetaxservices.com/form-5472.html): from $200 per tax year
+- [Form 7004 extension](https://meritlinetaxservices.com/form-5472.html): from $100 per tax year
+- [State annual reports and state tax returns](https://meritlinetaxservices.com/state-filings.html): from $100 per year, plus state fees
+- [Late filings and multi-year catch-up](https://meritlinetaxservices.com/late-filings.html): quoted by the number of years missed
+- Reasonable cause statement: from $250
+- FBAR (FinCEN Form 114): from $150 per year
+- LLC formation and EIN: from $250, plus state fees
+- Starter bookkeeping: from $125 per month
+- [Full pricing](https://meritlinetaxservices.com/pricing.html)
+- [Free Form 5472 checker](https://meritlinetaxservices.com/form-5472-checker.html): six questions that produce a filing checklist with starting prices
+- [Request a free quote](https://meritlinetaxservices.com/contact.html#quote)
+
+## Core guides
+
+- [Form 5472 Explained: The Complete Guide for Foreign Owners of U.S. LLCs](https://meritlinetaxservices.com/blog/form-5472-explained.html): who must file, reportable transactions, what each part asks, filing by fax, penalties, common mistakes
+- [Form 5472 Deadline 2026 and 2027](https://meritlinetaxservices.com/blog/form-5472-deadline-2026-2027.html): the 2026 tax year return is due April 15, 2027, or October 15, 2027 with Form 7004
+- [Form 5472 Extension: How to File Form 7004 for a Foreign-Owned LLC](https://meritlinetaxservices.com/blog/form-5472-extension-form-7004.html): foreign-owned LLCs fax Form 7004 to 855-887-7737 or mail it to the dedicated Ogden, Utah address
+- [Form 5472 Late Filing Penalty: How Abatement Works](https://meritlinetaxservices.com/blog/form-5472-late-filing-penalty-abatement.html): the $25,000 penalty, reasonable cause, first-time abatement limits, appeals
+- [Missed the October 15 Form 5472 Deadline?](https://meritlinetaxservices.com/blog/missed-october-15-form-5472-deadline.html)
+- [Form 5472 Tax Year and Due Dates](https://meritlinetaxservices.com/blog/form-5472-tax-year-due-dates.html): calendar year, fiscal year, and the first short year
+- [Do U.S. Owners Need Form 5472?](https://meritlinetaxservices.com/blog/form-5472-us-owners-and-corporations.html)
+- [Form 1120 vs. Form 1065](https://meritlinetaxservices.com/blog/form-1120-vs-form-1065.html)
+- [U.S. Tax Deadlines for 2027](https://meritlinetaxservices.com/blog/us-tax-deadlines-2027.html)
+
+## Guides by country of residence
+
+- [Nigeria](https://meritlinetaxservices.com/blog/us-llc-taxes-nigeria.html): no U.S.–Nigeria income tax treaty
+- [Ghana](https://meritlinetaxservices.com/blog/us-llc-taxes-ghana.html): no U.S.–Ghana income tax treaty
+- [Kenya](https://meritlinetaxservices.com/blog/us-llc-taxes-kenya.html): no U.S.–Kenya income tax treaty
+- [South Africa](https://meritlinetaxservices.com/blog/us-llc-taxes-south-africa.html): U.S.–South Africa tax treaty
+- [Egypt](https://meritlinetaxservices.com/blog/us-llc-taxes-egypt.html): U.S.–Egypt tax treaty
+- [United Arab Emirates](https://meritlinetaxservices.com/blog/us-llc-taxes-uae.html): no U.S.–UAE income tax treaty; UAE Corporate Tax
+- [Saudi Arabia](https://meritlinetaxservices.com/blog/us-llc-taxes-saudi-arabia.html): no U.S.–Saudi income tax treaty
+- [Qatar](https://meritlinetaxservices.com/blog/us-llc-taxes-qatar.html): no U.S.–Qatar income tax treaty
+- [Kuwait](https://meritlinetaxservices.com/blog/us-llc-taxes-kuwait.html): no U.S.–Kuwait income tax treaty; rules for expatriates
+- [Turkey (Türkiye)](https://meritlinetaxservices.com/blog/us-llc-taxes-turkey.html): U.S.–Turkey tax treaty
+- [India](https://meritlinetaxservices.com/blog/us-llc-taxes-india.html): India–U.S. tax treaty; Schedule FA and FEMA reporting
+- [Pakistan](https://meritlinetaxservices.com/blog/us-llc-taxes-pakistan.html): U.S.–Pakistan tax treaty
+- [Bangladesh](https://meritlinetaxservices.com/blog/us-llc-taxes-bangladesh.html): U.S.–Bangladesh tax treaty
+- [Philippines](https://meritlinetaxservices.com/blog/us-llc-taxes-philippines.html): U.S.–Philippines tax treaty
+
+## Optional
+
+- [About Meritline Tax Services](https://meritlinetaxservices.com/about.html)
+- [All articles](https://meritlinetaxservices.com/blog.html)
+- [Privacy Policy](https://meritlinetaxservices.com/privacy.html)
+- [Terms of Service](https://meritlinetaxservices.com/terms.html)
