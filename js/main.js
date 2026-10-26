@@ -648,9 +648,15 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
   gtag("consent", "default", { analytics_storage: "denied", region: ["AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU","IE","IT","LV","LT","LU","MT","NL","PL","PT","RO","SK","SI","ES","SE","IS","LI","NO","GB","CH"] });
   gtag("js", new Date());
   gtag("config", id);
-  const s = document.createElement("script"); s.async = true;
-  s.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(id);
-  document.head.appendChild(s);
+  /* Load the tag only after the page has finished showing, so it never slows the first view.
+     Events sent before then wait in dataLayer and are delivered once it loads. */
+  const load = () => {
+    const s = document.createElement("script"); s.async = true;
+    s.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(id);
+    document.head.appendChild(s);
+  };
+  const later = () => setTimeout(load, 1500);
+  if (document.readyState === "complete") later(); else window.addEventListener("load", later, { once: true });
   /* Count clicks on email, WhatsApp and booking links as contact attempts. */
   document.addEventListener("click", e => {
     const a = e.target.closest && e.target.closest("a[href]"); if (!a) return;
