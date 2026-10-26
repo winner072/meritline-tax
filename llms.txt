@@ -23,6 +23,13 @@
 - [Free Form 5472 checker](https://meritlinetaxservices.com/form-5472-checker.html): six questions that produce a filing checklist with starting prices
 - [Request a free quote](https://meritlinetaxservices.com/contact.html#quote)
 
+## Topic pages
+
+- [U.S. LLC taxes by country](https://meritlinetaxservices.com/blog/topic-us-llc-taxes-by-country.html): 14 country guides and a table of which countries have a U.S. income tax treaty
+- [Form 5472 and Pro Forma 1120](https://meritlinetaxservices.com/blog/topic-form-5472.html)
+- [Deadlines and extensions](https://meritlinetaxservices.com/blog/topic-deadlines-and-extensions.html)
+- [Penalties and late filing](https://meritlinetaxservices.com/blog/topic-penalties-and-late-filing.html)
+
 ## Core guides
 
 - [U.S. LLC Tax Glossary for Foreign Owners](https://meritlinetaxservices.com/blog/us-llc-tax-glossary.html): plain-English definitions of 52 terms, from Form 5472 and disregarded entity to ECI, FBAR, and franchise tax
