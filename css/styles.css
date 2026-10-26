@@ -643,7 +643,7 @@ section{padding-block:56px}
 /* Footer */
 .site-footer{background:var(--band);color:var(--band-muted);padding-block:56px 36px;font-size:14px}
 .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px;padding-bottom:32px;border-bottom:1px solid var(--band-line)}
-.foot-grid h4{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#EEF4FC;margin:0 0 12px}
+.foot-grid h3,.foot-grid h4{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#EEF4FC;margin:0 0 12px}
 .foot-grid ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .foot-grid a{text-decoration:none;color:var(--band-muted)}
 .foot-grid a:hover{color:#fff}
@@ -773,7 +773,7 @@ section{padding-block:56px}
 @media (max-width:700px){.receive-in{flex-direction:column;align-items:flex-start;gap:10px}.receive ul{width:100%;flex:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 14px}.receive li{font-size:13.5px}}
 @media (max-width:380px){.receive ul{grid-template-columns:1fr}}
 .remind{display:grid;grid-template-columns:1.1fr 1fr;gap:16px 40px;align-items:center;padding-bottom:32px;margin-bottom:36px;border-bottom:1px solid rgba(255,255,255,.12)}
-.remind h4{font-family:var(--display);font-size:19px;color:#fff;margin:0 0 6px;text-transform:none;letter-spacing:0}
+.remind h3,.remind h4{font-family:var(--display);font-size:19px;color:#fff;margin:0 0 6px;text-transform:none;letter-spacing:0}
 .remind p{margin:0;font-size:14.5px}
 .remind-row{display:flex;gap:10px}
 .remind-row input{flex:1;min-width:0;font:16px var(--body);color:#fff;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:12px 18px}
@@ -797,3 +797,7 @@ section{padding-block:56px}
 .hd-list li.next{background:rgba(93,176,255,.12);border-color:#5DB0FF}
 .hd-list li.next b::after{content:attr(data-away);margin-left:7px;font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#04101F;background:#5DB0FF;padding:2px 6px;border-radius:999px;vertical-align:1px}
 @media (max-width:560px){.hd-list{grid-template-columns:1fr;gap:3px}.hd-list li{padding:5px 10px}}
+/* contrast: white text on blue needs a deeper blue to stay readable */
+.btn-primary,.aside-box .btn-primary{background:#0B6BDB}.btn-primary:hover{background:#0A5BD6}
+.do-card .code,.tag,.read-more summary,.fc-b .fc-badge,.dl-list li.next b::after{background:#0B6BDB}
+.wa-float,.m-wa{background:#0F7B3C}.wa-float:hover{background:#0B6633}
