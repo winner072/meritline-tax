@@ -968,3 +968,27 @@ section{padding-block:56px}
 .btn-primary,.aside-box .btn-primary{background:#0B6BDB}.btn-primary:hover{background:#0A5BD6}
 .do-card .code,.tag,.read-more summary,.fc-b .fc-badge,.dl-list li.next b::after{background:#0B6BDB}
 .wa-float,.m-wa{background:#0F7B3C}.wa-float:hover{background:#0B6633}
+/* On this page */
+.toc{border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin:4px 0 26px;background:var(--surface)}
+.toc p.toc-h{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.toc ol{margin:0;padding-left:20px;columns:2 240px;column-gap:28px}
+.toc li{margin:0 0 6px;break-inside:avoid;font-size:15px}
+.article h2[id]{scroll-margin-top:96px}
+/* Read next */
+.read-next{margin:30px 0 8px;padding-top:22px;border-top:1px solid var(--line)}
+.read-next h2{font-size:20px;margin:0 0 14px}
+.rn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.rn-card{display:block;border:1px solid var(--line);border-radius:14px;padding:16px;text-decoration:none;color:inherit;background:var(--surface)}
+.rn-card:hover{border-color:#1C8CFF}
+.rn-card b{display:block;color:var(--ink);font-size:16px;line-height:1.35;margin-bottom:6px}
+.rn-card span{display:block;color:var(--muted);font-size:14px;line-height:1.5}
+/* Add to calendar */
+.cal-box{border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:18px 0 22px;background:var(--surface)}
+.cal-box h3{margin:0 0 4px;font-size:18px}
+.cal-box p.cal-note{margin:0 0 12px;color:var(--muted);font-size:14px}
+.cal-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 0;border-top:1px solid var(--line)}
+.cal-row b{min-width:210px;font-size:15px}
+.cal-row a{border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:14px;text-decoration:none;background:var(--bg)}
+.cal-row a:hover{border-color:#1C8CFF}
+.hd-cal{margin:10px 0 0;font-size:14px}
+.hd-cal a{color:#5DB0FF}
