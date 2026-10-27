@@ -1,0 +1,20 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Meritline Tax Services//Deadlines//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:form5472-2027-10-15@meritlinetaxservices.com
+DTSTAMP:20261027T000000Z
+DTSTART;VALUE=DATE:20271015
+DTEND;VALUE=DATE:20271016
+SUMMARY:Form 5472 extended deadline (2026 tax year)
+DESCRIPTION:Extended deadline for Form 5472 with pro forma Form 1120 (2026 tax year)\, if Form 7004 was filed by April 15\, 2027. Need help? https://meritlinetaxservices.com - WhatsApp +44 7520659818
+URL:https://meritlinetaxservices.com/blog/form-5472-deadline-2026-2027.html
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Form 5472 extended deadline (2026 tax year)
+TRIGGER:-P14D
+END:VALARM
+END:VEVENT
+END:VCALENDAR

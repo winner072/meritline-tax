@@ -1,0 +1,20 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Meritline Tax Services//Deadlines//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:form5472-2027-04-15@meritlinetaxservices.com
+DTSTAMP:20261027T000000Z
+DTSTART;VALUE=DATE:20270415
+DTEND;VALUE=DATE:20270416
+SUMMARY:Form 5472 + Pro Forma 1120 due (2026 tax year)
+DESCRIPTION:File Form 5472 with pro forma Form 1120 for the 2026 tax year by today\, or file Form 7004 by today to extend to October 15\, 2027. Need help? https://meritlinetaxservices.com - WhatsApp +44 7520659818
+URL:https://meritlinetaxservices.com/blog/form-5472-deadline-2026-2027.html
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Form 5472 + Pro Forma 1120 due (2026 tax year)
+TRIGGER:-P14D
+END:VALARM
+END:VEVENT
+END:VCALENDAR
