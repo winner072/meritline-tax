@@ -992,3 +992,9 @@ section{padding-block:56px}
 .cal-row a:hover{border-color:#1C8CFF}
 .hd-cal{margin:10px 0 0;font-size:14px}
 .hd-cal a{color:#5DB0FF}
+/* Compact WhatsApp button and slimmer phone bar, so they never cover content */
+.wa-float{width:52px;height:52px;padding:0;justify-content:center;font-size:0;gap:0;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));box-shadow:0 8px 20px -6px rgba(0,0,0,.45)}
+.wa-float svg{width:26px;height:26px}
+.wa-float::after{content:"Chat on WhatsApp";position:absolute;right:62px;top:50%;transform:translateY(-50%);white-space:nowrap;font-size:13px;font-weight:600;background:#0B1628;color:#fff;padding:6px 10px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .15s ease}
+.wa-float:hover::after,.wa-float:focus-visible::after{opacity:1}
+@media (max-width:700px){.m-bar{padding:6px 10px calc(6px + env(safe-area-inset-bottom,0px));gap:6px}.m-bar .btn{padding:9px 10px;font-size:14px;min-height:0}}
