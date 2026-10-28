@@ -7,7 +7,7 @@ const SETTINGS = {
   email: "info@meritlinetaxservices.com",
   phone: "+44 7520659818",          // how your number should appear, e.g. "+44 7520659818"
   whatsapp: "447520659818",       // same number, digits only with country code, e.g. "447520659818"
-  hours: "Monday to Friday, 7:00 AM to 5:00 PM GMT",   // your business hours, shown on every page
+  hours: "Mon–Fri, 7 AM–5 PM GMT",   // your business hours, shown on every page
   formEndpoint: "https://formspree.io/f/mrpeyvzn",   // your Formspree form URL, e.g. "https://formspree.io/f/mrpeyvzn"
   bookingUrl: "https://calendly.com/winnermwn/30min",     // your Calendly (or similar) link for the free 20-minute call
   analyticsId: "G-T31R5VJ5VD",   // your Google Analytics measurement ID (leave empty to switch analytics off)
