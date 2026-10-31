@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Form 5472 Penalty Calculator | Meritline Tax Services</title>
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://meritlinetaxservices.com/form-5472-penalty-calculator.html">
+<style>
+@font-face{font-family:Figtree;src:url(../fonts/figtree-latin.woff2) format('woff2');font-weight:300 900;font-display:swap}
+*{box-sizing:border-box}
+body{margin:0;font-family:Figtree,Arial,sans-serif;color:#18212F;background:#fff;font-size:15px;line-height:1.5}
+.c{border:1.5px solid #0B6BDB;border-radius:16px;padding:18px 20px;max-width:640px;margin:0 auto}
+h1{font-size:19px;margin:0 0 14px}
+.row{margin:0 0 14px}
+.lbl{display:block;font-weight:700;margin:0 0 6px}
+select,input[type=number]{width:100%;max-width:280px;padding:9px 10px;border:1px solid #D5DEEA;border-radius:9px;font:inherit;color:#18212F;background:#fff}
+.opts{display:grid;gap:6px}
+.opts label,.chk{display:flex;gap:9px;align-items:flex-start;border:1px solid #D5DEEA;border-radius:9px;padding:8px 10px;cursor:pointer}
+.chk{margin-top:8px}
+input[type=radio],input[type=checkbox]{margin-top:4px;accent-color:#0B6BDB}
+.res{border-top:1px solid #E1E7EF;padding-top:14px}
+.k{margin:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#5A6575}
+.tot{font-weight:800;font-size:36px;line-height:1.1;margin:2px 0 10px;color:#C2410C}
+ul{list-style:none;margin:0 0 12px;padding:0}
+li{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid #E1E7EF;font-size:14px}
+li b{text-align:right}
+.adv{background:#F6F8FB;border-left:3px solid #E8A23B;border-radius:0 9px 9px 0;padding:10px 12px;font-size:14px;margin:0 0 12px}
+.fine{font-size:12px;color:#5A6575;margin:0 0 10px}
+.by{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:#5A6575;border-top:1px solid #E1E7EF;padding-top:10px}
+.by a{color:#0B6BDB;font-weight:700;text-decoration:none}
+.by a.btn{background:#0B6BDB;color:#fff;border-radius:999px;padding:7px 14px}
+</style>
+</head>
+<body>
+<div class="c">
+  <h1>Form 5472 penalty calculator</h1>
+  <div class="row"><label class="lbl" for="y">Tax years filed late or not filed</label>
+    <select id="y"><option value="1">1 year</option><option value="2">2 years</option><option value="3">3 years</option><option value="4">4 years</option><option value="5">5 years</option><option value="6">6 years</option><option value="7">7 years</option><option value="8">8 years</option><option value="9">9 years</option></select></div>
+  <div class="row"><span class="lbl" id="sl">Where do things stand today?</span>
+    <div class="opts" role="radiogroup" aria-labelledby="sl">
+      <label><input type="radio" name="s" value="unfiled" checked> Still not filed, no letter from the IRS</label>
+      <label><input type="radio" name="s" value="filedlate"> Filed late, no letter from the IRS yet</label>
+      <label><input type="radio" name="s" value="notice"> I received an IRS penalty notice</label>
+    </div></div>
+  <div class="row" id="nb" hidden><label class="lbl" for="d">Days since the notice date</label>
+    <input type="number" id="d" min="0" max="2000" value="30" inputmode="numeric">
+    <label class="chk"><input type="checkbox" id="st" checked> The returns in the notice are still not filed</label></div>
+  <div class="res" aria-live="polite">
+    <p class="k">Maximum possible penalty</p>
+    <p class="tot" id="t">$25,000</p>
+    <ul id="b"></ul>
+    <div class="adv" id="a"></div>
+    <p class="fine">The maximum the law allows under section 6038A, not a prediction. The IRS decides each case, and reasonable cause relief may reduce or remove it.</p>
+  </div>
+  <div class="by"><span>Calculator by <a href="https://meritlinetaxservices.com/form-5472-penalty-calculator.html" target="_blank" rel="noopener">Meritline Tax Services</a></span><a class="btn" href="https://meritlinetaxservices.com/contact.html#quote" target="_blank" rel="noopener">Get help</a></div>
+</div>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var money = function (n) { return '$' + n.toLocaleString('en-US'); };
+  function calc() {
+    var years = parseInt($('y').value, 10) || 1, s = (document.querySelector('input[name="s"]:checked') || {}).value || 'unfiled';
+    $('nb').hidden = s !== 'notice';
+    var base = years * 25000, periods = 0, cont = 0, days = Math.max(0, parseInt($('d').value, 10) || 0), still = $('st').checked;
+    if (s === 'notice' && still && days > 90) { periods = Math.ceil((days - 90) / 30); cont = periods * 25000 * years; }
+    $('t').textContent = money(base + cont);
+    var b = '<li><span>Initial: ' + years + ' × $25,000</span><b>' + money(base) + '</b></li>';
+    if (s === 'notice' && still) b += days > 90 ? '<li><span>Continuation: ' + periods + ' × 30 days after day 90</span><b>' + money(cont) + '</b></li>' : '<li><span>Continuation penalty</span><b>Starts after day 90 (' + (90 - days) + ' days left)</b></li>';
+    else b += '<li><span>Continuation penalty</span><b>' + (s === 'notice' ? 'Stopped: returns filed' : 'Not started: no IRS notice') + '</b></li>';
+    $('b').innerHTML = b;
+    $('a').innerHTML = s === 'unfiled' ? '<b>Best move:</b> file every missing year now, before the IRS writes, with a reasonable cause statement.' : s === 'filedlate' ? '<b>Next:</b> keep your filing proof. If a notice arrives, reply within its deadline asking for abatement.' : still ? '<b>Act now:</b> file the missing returns and respond to the notice within its deadline.' : '<b>Next:</b> respond to the notice within its deadline with a written abatement request.';
+    try { parent.postMessage({ mlEmbedHeight: document.documentElement.scrollHeight }, '*'); } catch (e) {}
+  }
+  ['y', 'd', 'st'].forEach(function (id) { $(id).addEventListener('input', calc); $(id).addEventListener('change', calc); });
+  document.querySelectorAll('input[name="s"]').forEach(function (r) { r.addEventListener('change', calc); });
+  calc();
+})();
+</script>
+</body>
+</html>
