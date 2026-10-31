@@ -24,6 +24,7 @@
 - [Full pricing](https://meritlinetaxservices.com/pricing.html)
 - [Free Form 5472 checker](https://meritlinetaxservices.com/form-5472-checker.html): six questions that produce a filing checklist with starting prices
 - [Free Form 5472 penalty calculator](https://meritlinetaxservices.com/form-5472-penalty-calculator.html): shows the maximum IRS penalty for missed years and the steps that can reduce it
+- [Form 5472 Reasonable Cause Letter Builder](https://meritlinetaxservices.com/reasonable-cause-letter-generator.html): free tool that drafts a reasonable cause statement for a Form 5472 penalty, for late returns or in reply to an IRS notice
 - [Request a free quote](https://meritlinetaxservices.com/contact.html#quote)
 
 ## Topic pages
