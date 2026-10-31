@@ -917,9 +917,9 @@ section{padding-block:56px}
 .legal-page p,.legal-page ul{margin-block:0 14px}
 .legal-page ul{padding-left:22px}
 .legal-page .updated{font-size:14px;color:var(--muted)}
-.foot-grid{grid-template-columns:1.3fr 1fr 1fr 1fr}
+.foot-grid{grid-template-columns:1.3fr 1fr 1fr 1fr 1fr;gap:28px}
 .legal-links{display:flex;flex-wrap:wrap;gap:16px}
-@media (max-width:900px){.foot-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:900px){.foot-grid{grid-template-columns:1fr 1fr}.foot-grid > div:first-child{grid-column:1/-1}}
 .detail .val a{color:inherit}
 .btn-ghost-light{border:1.5px solid var(--line);color:var(--ink);background:var(--surface)}
 .btn-ghost-light:hover{border-color:var(--blue)}
