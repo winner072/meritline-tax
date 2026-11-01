@@ -127,7 +127,7 @@
         <input type="hidden" name="form_type" value="Client review">
         <div class="row2">
           <div class="field"><label for="r-name">Your name</label><input id="r-name" name="review_name" autocomplete="name" placeholder="e.g. Adaeze O." required></div>
-          <div class="field"><label for="r-country">Country</label><input id="r-country" name="review_country" autocomplete="country-name"></div>
+          <div class="field"><label for="r-country">Country <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input id="r-country" name="review_country" autocomplete="country-name"></div>
         </div>
         <div class="field"><span class="lbl-like" id="r-rating-lbl">Your rating</span>
           <div class="stars" role="radiogroup" aria-labelledby="r-rating-lbl">
@@ -138,8 +138,16 @@
             <input type="radio" id="r1" name="rating" value="1"><label for="r1" title="1 star">★</label>
           </div>
         </div>
+        <div class="field"><span class="lbl-like" id="r-hl-lbl">What stood out? <span style="font-weight:400;color:var(--muted)">(optional)</span></span>
+          <div class="rv-chips" role="group" aria-labelledby="r-hl-lbl">
+            <label><input type="checkbox" name="highlights" value="Transparent pricing"> Transparent pricing</label>
+            <label><input type="checkbox" name="highlights" value="Fast response"> Fast response</label>
+            <label><input type="checkbox" name="highlights" value="Clear explanations"> Clear explanations</label>
+            <label><input type="checkbox" name="highlights" value="Filed on time"> Filed on time</label>
+          </div>
+        </div>
         <div class="field"><label for="r-text">Your review</label><textarea id="r-text" name="review_text" placeholder="What did we help you with, and how was your experience?" required></textarea></div>
-        <label class="consent"><input type="checkbox" id="r-consent" name="publish_consent" value="yes"> I agree that Meritline Tax may publish this review on its website with my first name and country.</label>
+        <label class="consent"><input type="checkbox" id="r-consent" name="publish_consent" value="yes"> I agree that Meritline Tax may publish this review on its website with my first name, and my country if I have given it.</label>
         <button class="btn btn-primary" type="submit">Submit review</button>
         <p class="form-msg" id="reviewMsg" hidden></p>
       </form>
