@@ -644,6 +644,28 @@ section{padding-block:68px}
 .review blockquote{margin:0;font-size:16px;line-height:1.6}
 .review figcaption{display:grid;font-size:14px}
 .review figcaption span{color:var(--muted)}
+.rv-top{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
+.rv-av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#EAF2FE;color:#0B6BDB;font-weight:800;font-size:17px}
+.rv-date{font-size:13px;color:var(--muted);white-space:nowrap}
+.rv-stars{margin:0;color:#F5B301;font-size:18px;letter-spacing:2px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rv-tag{font-size:12px;letter-spacing:0;color:var(--blue-deep,#0B4FB3);background:#EAF2FE;border-radius:999px;padding:3px 10px;font-weight:600}
+.rv-sum{color:var(--muted);font-weight:600;margin-top:6px}
+.rv-all{margin:18px 0 0}
+.rv-all a{font-weight:700;color:var(--blue-deep,#0B4FB3);text-decoration:none}
+.rv-all a:hover{text-decoration:underline}
+.review{align-content:start}
+.rv-score{font-size:13px;letter-spacing:0;color:var(--muted);font-weight:600}
+.rv-service{margin:0;font-size:13px;font-weight:600;color:var(--ink)}
+.review blockquote.rv-long{display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.review blockquote.rv-long.rv-open{display:block}
+.rv-more{justify-self:start;background:none;border:0;padding:0;font:inherit;font-size:14px;font-weight:700;color:var(--blue-deep,#0B4FB3);cursor:pointer}
+.rv-more:hover{text-decoration:underline}
+@media (max-width:640px){#reviews .review-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding-bottom:8px;-webkit-overflow-scrolling:touch}#reviews .review{flex:0 0 86%;scroll-snap-align:start}}
+.rv-chips{display:flex;flex-wrap:wrap;gap:8px}
+.rv-chips label{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:14px;cursor:pointer;background:var(--surface)}
+.review-form .rv-chips label{display:inline-flex;width:auto;margin:0;white-space:nowrap;font-weight:500}
+.review-form .rv-chips input{width:16px;height:16px;min-height:0;padding:0;margin:0;flex:0 0 auto;accent-color:#0B6BDB}
+.rv-chips label:has(input:checked){border-color:#0B6BDB;background:#EAF2FE;color:#0B4FB3;font-weight:600}
 /* Leave a review */
 .review-strip{background:var(--surface);border-top:1px solid var(--line);padding-block:48px}
 .rs-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px}
