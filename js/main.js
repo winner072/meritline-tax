@@ -19,8 +19,8 @@ const SETTINGS = {
   ],
   linkedin: "https://www.linkedin.com/in/mmesoma-winner-516109437/",       // your LinkedIn page link, e.g. "https://www.linkedin.com/company/meritline-tax"
   reviewUrl: "",      // your Trustpilot (or other) review page link
-  reviews: [          // real client reviews only, with permission
-    // { text: "Meritline filed three years of Form 5472 for my LLC quickly.", name: "Adaeze O.", place: "Lagos, Nigeria" }
+  reviews: [          // real client reviews only, with permission. Only text and name are required; place (country), rating (1-5), date ("YYYY-MM-DD"), service and tag are optional.
+    // { text: "Meritline filed three years of Form 5472 for my LLC quickly.", name: "Adaeze", place: "Nigeria", rating: 5, date: "2026-11-20", service: "Late filings (3 years)", tag: "Transparent pricing" }
   ]
 };
 /* ===================================================================== */
@@ -41,7 +41,13 @@ const store = {
   if (SETTINGS.payments) document.querySelectorAll("[data-payments]").forEach(el => { el.querySelector("b").textContent = SETTINGS.payments; el.hidden = false; });
   const rv = $("reviews");
   if (rv && SETTINGS.reviews && SETTINGS.reviews.length) {
-    $("reviewList").innerHTML = SETTINGS.reviews.map(r => `<figure class="review"><blockquote>“${esc(r.text)}”</blockquote><figcaption><b>${esc(r.name || "")}</b>${r.place ? `<span>${esc(r.place)}</span>` : ""}</figcaption></figure>`).join("");
+    const R = SETTINGS.reviews, stars = n => "★★★★★".slice(0, n) + "☆☆☆☆☆".slice(0, 5 - n);
+    const day = d => { const x = new Date(d + "T00:00:00"); return isNaN(x) ? "" : x.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }); };
+    const avg = R.reduce((s, r) => s + (r.rating || 5), 0) / R.length;
+    $("reviewList").innerHTML = R.map(r => `<figure class="review"><div class="rv-top"><span class="rv-av" aria-hidden="true">${esc((r.name || "?").charAt(0).toUpperCase())}</span><figcaption><b>${esc(r.name || "")}</b>${r.place ? `<span>${esc(r.place)}</span>` : ""}</figcaption>${r.date ? `<time class="rv-date" datetime="${esc(r.date)}">${esc(day(r.date))}</time>` : ""}</div><p class="rv-stars"><span aria-hidden="true">${stars(r.rating || 5)}</span><span class="rv-score">${r.rating || 5} out of 5</span>${r.tag ? `<span class="rv-tag">${esc(r.tag)}</span>` : ""}</p>${r.service ? `<p class="rv-service">Service: ${esc(r.service)}</p>` : ""}<blockquote class="${r.text.length > 280 ? "rv-long" : ""}">“${esc(r.text)}”</blockquote>${r.text.length > 280 ? `<button type="button" class="rv-more">Read more</button>` : ""}</figure>`).join("");
+    $("reviewList").querySelectorAll(".rv-more").forEach(b => b.addEventListener("click", () => { const q = b.previousElementSibling, open = q.classList.toggle("rv-open"); b.textContent = open ? "Show less" : "Read more"; }));
+    const sum = $("reviewSum"); if (sum) { sum.textContent = `${avg.toFixed(1)} out of 5 from ${R.length} client review${R.length > 1 ? "s" : ""}`; sum.hidden = false; }
+    const all = $("reviewAll"); if (all && SETTINGS.reviewUrl) { all.href = SETTINGS.reviewUrl; all.hidden = false; }
     rv.hidden = false;
   }
   const tg = $("teamGrid");
