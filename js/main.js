@@ -18,7 +18,7 @@ const SETTINGS = {
     // { name: "Jane Doe, CPA", role: "Reviewing CPA (Ohio)", photo: "images/jane.jpg" }
   ],
   linkedin: "https://www.linkedin.com/in/mmesoma-winner-516109437/",       // your LinkedIn page link, e.g. "https://www.linkedin.com/company/meritline-tax"
-  reviewUrl: "",      // your Trustpilot (or other) review page link
+  reviewUrl: "https://www.trustpilot.com/review/meritlinetaxservices.com",      // your Trustpilot (or other) review page link
   reviews: [          // real client reviews only, with permission. Only text and name are required; place (country), rating (1-5), date ("YYYY-MM-DD"), service and tag are optional.
     // { text: "Meritline filed three years of Form 5472 for my LLC quickly.", name: "Adaeze", place: "Nigeria", rating: 5, date: "2026-11-20", service: "Late filings (3 years)", tag: "Transparent pricing" }
   ]
