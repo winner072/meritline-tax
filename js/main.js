@@ -593,23 +593,136 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
   });
 })();
 
-/* ---------- Quote form ---------- */
+/* ---------- Quote form (three steps) ---------- */
 (function () {
   const form = $("quote"); if (!form) return;
-  const msg = $("formMsg");
+  const msg = $("formMsg"), steps = [...form.querySelectorAll(".qf-step")], track = [...form.querySelectorAll("#qfTrack li")];
+  const back = $("qfBack"), next = $("qfNext"), send = $("qfSend"), service = $("f-service"), rescue = $("qfRescue");
+  const MAIN = service.options[0].value, LATE = "Late filing or IRS notice", OTHER = "State filing or annual report";
+  const STATES = ["Wyoming", "Delaware", "New Mexico", "Florida", "Texas", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "District of Columbia", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin"];
+  const now = new Date(), thisYear = now.getFullYear();
+  const lastDue = now >= new Date(thisYear, 3, 15) ? thisYear - 1 : thisYear - 2;   // latest tax year whose April 15 date has passed
+  let step = 0;
+  const addOptions = (sel, list) => list.forEach(v => sel.add(new Option(v, v)));
+  addOptions($("f-state"), [...STATES, "Not sure"]);
+  const yearsBack = []; for (let y = thisYear; y >= 2017; y--) yearsBack.push(String(y));
+  addOptions($("f-formed"), [...yearsBack, "Before 2017", "Not sure"]);
+
+  const checked = n => form.querySelector(`input[name="${n}"]:checked`);
+  const val = n => { const c = checked(n); return c ? c.value : ""; };
+  const say = t => { msg.textContent = t; msg.hidden = !t; };
+  const missed = () => [...form.querySelectorAll('input[name="missed_years"]:checked')].map(c => c.value);
+
+  function buildYears() {
+    const keep = missed(), f = parseInt($("f-formed").value, 10), from = f || (lastDue - 5), list = [];
+    const start = $("f-formed").value === "Before 2017" ? 2017 : from;
+    for (let y = start; y <= lastDue; y++) list.push(String(y));
+    list.push("Not sure");
+    $("qfYearList").innerHTML = list.map(y => `<label><input type="checkbox" name="missed_years" value="${y}"${keep.includes(y) ? " checked" : ""}> ${y}</label>`).join("");
+  }
+  function sync() {
+    const s = val("situation");
+    $("qfOther").hidden = s !== "Something else";
+    if (s === "Something else") { if (service.value === MAIN || service.value === LATE) service.value = OTHER; }
+    else if (s) service.value = (s === "Missed years" || s === "IRS letter") ? LATE : MAIN;
+    $("qfYears").hidden = s !== "Missed years";
+    $("qfLetter").hidden = s !== "IRS letter";
+  }
+  function answers() {
+    const s = val("situation"), c = checked("situation"), a = [];
+    if (c) a.push(["Situation", c.parentElement.querySelector("b").textContent]);
+    if (s === "Something else") a.push(["Service", service.value]);
+    if ($("f-state").value) a.push(["State", $("f-state").value]);
+    if ($("f-formed").value) a.push(["Formed", $("f-formed").value]);
+    if (val("owners")) a.push(["Owners", val("owners")]);
+    if (s === "Missed years" && missed().length) a.push(["Unfiled years", missed().join(", ")]);
+    if (s === "IRS letter" && $("f-ldate").value.trim()) a.push(["Letter date", $("f-ldate").value.trim()]);
+    if (s === "IRS letter" && $("f-lnum").value.trim()) a.push(["Notice number", $("f-lnum").value.trim()]);
+    return a;
+  }
+  function summary() {
+    $("qfSum").innerHTML = answers().map(x => `<dt>${esc(x[0])}</dt><dd>${esc(x[1])}</dd>`).join("");
+    const s = val("situation");
+    const line = s === "Missed years" || s === "IRS letter" ? "The price depends on the number of years involved."
+      : s === "File this year" ? "Form 5472 with the pro forma Form 1120 starts from $200."
+      : s === "Not sure if a filing is needed" ? "We will confirm whether a return is due, at no charge."
+      : "";
+    $("qfPrice").textContent = `${line} We reply within 30 minutes on working days, with one fixed price in writing before any work starts.`.trim();
+  }
+  function go(n) {
+    step = n;
+    steps.forEach((el, i) => { el.hidden = i !== n; });
+    track.forEach((li, i) => { li.classList.toggle("on", i === n); li.classList.toggle("done", i < n); if (i === n) li.setAttribute("aria-current", "step"); else li.removeAttribute("aria-current"); });
+    back.hidden = n === 0; next.hidden = n === 2; send.hidden = n !== 2; $("qfSecure").hidden = n !== 2;
+    say(""); rescue.hidden = true; send.textContent = "Request my free quote";
+    if (n === 1) buildYears();
+    if (n === 2) summary();
+    steps[n].querySelector(".qf-title").focus({ preventScroll: true });
+    if (form.getBoundingClientRect().top < 0) form.scrollIntoView({ behavior: "smooth" });
+    if (window.gtag) gtag("event", "quote_step", { step: n + 1 });
+  }
+  function forward() {
+    if (step === 0 && !val("situation")) { say("Please choose the option closest to your situation."); return; }
+    if (step < 2) go(step + 1);
+  }
+  function plainText() {
+    const lines = ["Hello Meritline Tax, I would like a quote.", `Name: ${$("f-name").value.trim()}`, `Email: ${$("f-email").value.trim()}`];
+    if ($("f-phone").value.trim()) lines.push(`WhatsApp: ${$("f-phone").value.trim()}`);
+    answers().forEach(x => lines.push(`${x[0]}: ${x[1]}`));
+    if ($("f-msg").value.trim()) lines.push(`Message: ${$("f-msg").value.trim()}`);
+    return lines.join("\n");
+  }
+  function showRescue() {
+    const text = plainText();
+    $("qfWa").href = `https://wa.me/${SETTINGS.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(text)}`;
+    $("qfMail").href = `mailto:${SETTINGS.email}?subject=${encodeURIComponent("Quote request")}&body=${encodeURIComponent(text)}`;
+    $("qfCopy").textContent = "Copy my answers";
+    rescue.hidden = false; send.textContent = "Try again";
+  }
+
+  form.addEventListener("change", e => {
+    if (e.target.name === "situation") { sync(); say(""); }
+    if (e.target.id === "f-formed") buildYears();
+  });
+  next.addEventListener("click", forward);
+  back.addEventListener("click", () => go(step - 1));
+  $("qfEdit").addEventListener("click", () => go(0));
+  $("qfCopy").addEventListener("click", async e => {
+    const b = e.currentTarget;
+    try { await navigator.clipboard.writeText(plainText()); b.textContent = "Copied"; }
+    catch (_) { b.textContent = "Please copy by hand"; }
+  });
+
   const svc = store.take("mt_service"), note = store.take("mt_msg");
-  if (svc) { const s = $("f-service"); if (s) s.value = svc; }
+  if (svc) {
+    service.value = svc;
+    const card = svc === MAIN ? "File this year" : svc === LATE ? "Missed years" : "Something else";
+    const r = form.querySelector(`input[name="situation"][value="${card}"]`); if (r) r.checked = true;
+    sync(); if (card === "Something else") service.value = svc;
+  }
   if (note) { const m = $("f-msg"); if (m && !m.value) m.value = note + "\n"; }
+
   form.addEventListener("submit", async e => {
-    e.preventDefault(); msg.hidden = false;
+    e.preventDefault();
+    if (step < 2) { forward(); return; }
     const name = $("f-name").value.trim(), email = $("f-email").value.trim();
-    if (!name || !/^\S+@\S+\.\S+$/.test(email)) { msg.textContent = "Please enter your full name and a valid email address."; return; }
-    if (!SETTINGS.formEndpoint) { msg.textContent = "Online requests are not active yet. Please contact us directly using the email or WhatsApp number on this page."; return; }
-    msg.textContent = "Sending…";
+    if (!name || !/^\S+@\S+\.\S+$/.test(email)) { say("Please enter your full name and a valid email address."); return; }
+    rescue.hidden = true; say("Sending…"); send.disabled = true;
+    const s = val("situation"), years = missed(), data = new FormData(form);
+    data.delete("missed_years");
+    if (s === "Missed years" && years.length) data.set("missed_years", years.join(", "));
+    if (s !== "IRS letter") { data.delete("letter_date"); data.delete("notice_number"); }
+    data.set("_subject", `New quote request: ${s}`);
     try {
-      const r = await fetch(SETTINGS.formEndpoint, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } }); if (!r.ok) throw 0;
-      if (window.gtag) gtag("event", "generate_lead", { form: "quote" }); form.reset(); msg.textContent = "Thank you. Your quote request has been received and we will reply shortly.";
-    } catch (_) { msg.textContent = "Your request could not be sent. Please try again, or contact us directly by email or WhatsApp."; }
+      const r = await fetch(SETTINGS.formEndpoint, { method: "POST", body: data, headers: { Accept: "application/json" } }); if (!r.ok) throw 0;
+      if (window.gtag) gtag("event", "generate_lead", { form: "quote" });
+      steps.forEach(el => { el.hidden = true; }); $("qfNav").hidden = true; $("qfSecure").hidden = true; $("qfTrack").hidden = true;
+      say(`Thank you, ${name.split(" ")[0]}. We have your request and will reply within 30 minutes on working days. Please check your spam folder if you do not see our email.`);
+      msg.focus({ preventScroll: true }); form.scrollIntoView({ behavior: "smooth" });
+    } catch (_) {
+      say("We could not send your request just now.");
+      showRescue();
+    } finally { send.disabled = false; }
   });
 })();
 
