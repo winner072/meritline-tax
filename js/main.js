@@ -13,6 +13,7 @@ const SETTINGS = {
   analyticsId: "G-T31R5VJ5VD",   // your Google Analytics measurement ID (leave empty to switch analytics off)
   uploadUrl: "",      // your secure document upload / client portal link
   ptin: "",           // your PTIN once issued, e.g. "P01234567"
+  ptinName: "",       // name of the person the PTIN belongs to, e.g. "Jane Doe"
   payments: "",       // e.g. "Card, bank transfer, or Wise"
   team: [             // more team members. Put each photo in the images folder.
     // { name: "Jane Doe, CPA", role: "Reviewing CPA (Ohio)", photo: "images/jane.jpg" }
@@ -32,21 +33,22 @@ const store = {
   set(k, v) { try { sessionStorage.setItem(k, v); } catch (_) {} },
   take(k) { try { const v = sessionStorage.getItem(k); sessionStorage.removeItem(k); return v; } catch (_) { return null; } }
 };
+try { if (!sessionStorage.getItem("mt_land")) sessionStorage.setItem("mt_land", location.pathname); } catch (_) {}
 
 /* ---------- Settings applied on every page ---------- */
 (function () {
   if (SETTINGS.bookingUrl) document.querySelectorAll("[data-book]").forEach(a => { a.href = SETTINGS.bookingUrl; a.target = "_blank"; a.rel = "noopener"; a.removeAttribute("data-service"); });
   if (SETTINGS.uploadUrl) document.querySelectorAll("[data-upload]").forEach(a => { a.href = SETTINGS.uploadUrl; a.hidden = false; });
-  if (SETTINGS.ptin) document.querySelectorAll("[data-ptin]").forEach(el => { el.textContent = "IRS-registered tax preparer · PTIN " + SETTINGS.ptin; el.hidden = false; });
+  if (SETTINGS.ptin) document.querySelectorAll("[data-ptin]").forEach(el => { el.textContent = SETTINGS.ptinName ? "Returns prepared by " + SETTINGS.ptinName + ", PTIN " + SETTINGS.ptin : "Tax preparer PTIN " + SETTINGS.ptin; el.hidden = false; });
   if (SETTINGS.payments) document.querySelectorAll("[data-payments]").forEach(el => { el.querySelector("b").textContent = SETTINGS.payments; el.hidden = false; });
   const rv = $("reviews");
   if (rv && SETTINGS.reviews && SETTINGS.reviews.length) {
-    const R = SETTINGS.reviews, stars = n => "★★★★★".slice(0, n) + "☆☆☆☆☆".slice(0, 5 - n);
+    const R = SETTINGS.reviews, stars = n => [1, 2, 3, 4, 5].map(i => `<i class="st${i <= n ? " on" : ""}"></i>`).join("");
     const day = d => { const x = new Date(d + "T00:00:00"); return isNaN(x) ? "" : x.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }); };
-    const avg = R.reduce((s, r) => s + (r.rating || 5), 0) / R.length;
-    $("reviewList").innerHTML = R.map(r => `<figure class="review"><div class="rv-top"><span class="rv-av" aria-hidden="true">${esc((r.name || "?").charAt(0).toUpperCase())}</span><figcaption><b>${esc(r.name || "")}</b>${r.place ? `<span>${esc(r.place)}</span>` : ""}</figcaption>${r.date ? `<time class="rv-date" datetime="${esc(r.date)}">${esc(day(r.date))}</time>` : ""}</div><p class="rv-stars"><span aria-hidden="true">${stars(r.rating || 5)}</span><span class="rv-score">${r.rating || 5} out of 5</span>${r.tag ? `<span class="rv-tag">${esc(r.tag)}</span>` : ""}</p>${r.service ? `<p class="rv-service">Service: ${esc(r.service)}</p>` : ""}<blockquote class="${r.text.length > 280 ? "rv-long" : ""}">“${esc(r.text)}”</blockquote>${r.text.length > 280 ? `<button type="button" class="rv-more">Read more</button>` : ""}</figure>`).join("");
+    const rated = R.filter(r => typeof r.rating === "number" && r.rating > 0), avg = rated.length ? rated.reduce((s, r) => s + r.rating, 0) / rated.length : 0;
+    $("reviewList").innerHTML = R.map(r => `<figure class="review"><div class="rv-top"><span class="rv-av" aria-hidden="true">${esc((r.name || "?").charAt(0).toUpperCase())}</span><figcaption><b>${esc(r.name || "")}</b>${r.place ? `<span>${esc(r.place)}</span>` : ""}</figcaption>${r.date ? `<time class="rv-date" datetime="${esc(r.date)}">${esc(day(r.date))}</time>` : ""}</div><p class="rv-stars">${typeof r.rating === "number" && r.rating > 0 ? `<span aria-hidden="true">${stars(r.rating)}</span><span class="rv-score">${r.rating} out of 5</span>` : ""}${r.tag ? `<span class="rv-tag">${esc(r.tag)}</span>` : ""}</p>${r.service ? `<p class="rv-service">Service: ${esc(r.service)}</p>` : ""}<blockquote class="${r.text.length > 280 ? "rv-long" : ""}">“${esc(r.text)}”</blockquote>${r.text.length > 280 ? `<button type="button" class="rv-more">Read more</button>` : ""}</figure>`).join("");
     $("reviewList").querySelectorAll(".rv-more").forEach(b => b.addEventListener("click", () => { const q = b.previousElementSibling, open = q.classList.toggle("rv-open"); b.textContent = open ? "Show less" : "Read more"; }));
-    const sum = $("reviewSum"); if (sum) { sum.textContent = `${avg.toFixed(1)} out of 5 from ${R.length} client review${R.length > 1 ? "s" : ""}`; sum.hidden = false; }
+    const sum = $("reviewSum"); if (sum && rated.length) { sum.textContent = `${avg.toFixed(1)} out of 5 from ${rated.length} client review${rated.length > 1 ? "s" : ""}`; sum.hidden = false; }
     const all = $("reviewAll"); if (all && SETTINGS.reviewUrl) { all.href = SETTINGS.reviewUrl; all.hidden = false; }
     rv.hidden = false;
   }
@@ -63,7 +65,9 @@ const store = {
   if (SETTINGS.linkedin) document.querySelectorAll("[data-linkedin]").forEach(el => { el.classList.remove("fill"); el.innerHTML = `<a href="${esc(SETTINGS.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>`; });
   if (SETTINGS.whatsapp) {
     const link = "https://wa.me/" + SETTINGS.whatsapp.replace(/\D/g, "");
-    [["waFloat"], ["mWa"]].forEach(([id]) => { const w = $(id); if (w) { w.href = link; w.hidden = false; } });
+    const h1 = document.querySelector("h1"), topic = h1 ? h1.textContent.replace(/\s+/g, " ").trim() : document.title;
+    const chat = link + "?text=" + encodeURIComponent("Hello Meritline Tax, I have a question about: " + topic);
+    [["waFloat"], ["mWa"]].forEach(([id]) => { const w = $(id); if (w) { w.href = chat; w.hidden = false; } });
   }
   const yr = $("yr"); if (yr) yr.textContent = new Date().getFullYear();
 })();
@@ -269,7 +273,7 @@ const PRICES = {
     "State Business Tax Return",
     "From $100",
     "",
-    "Filing fee per state. See the State Tax tab for details."
+    "Filing fee per state. See the State Filings tab for details."
    ],
    [
     "Form 7004 (Extension)",
@@ -313,7 +317,7 @@ const PRICES = {
     "State Individual Return",
     "From $100",
     "",
-    "Filing fee per state. See the State Tax tab for details."
+    "Filing fee per state. See the State Filings tab for details."
    ],
    [
     "Amended Return",
@@ -418,6 +422,8 @@ document.addEventListener("click", e => {
 function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (m && !m.value) m.value = text + "\n"; }
 
 /* ---------- Pricing tabs (pricing page) ---------- */
+/* Keep product names and prices on one line when they wrap */
+const nb = s => String(s).replace(/Pro Forma 1120/g, "Pro\u00a0Forma\u00a01120").replace(/\b([Ff]rom) \$/g, "$1\u00a0$$").replace(/Form (\d{4})/g, "Form\u00a0$1").replace(/(\d) (characters|digits)/g, "$1\u00a0$2");
 (function () {
   const tabs = $("priceTabs"), panel = $("pricePanel"); if (!tabs || !panel) return;
   function show(name) {
@@ -425,9 +431,11 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
     if (MORE_TABS.includes(name) && !tabs.classList.contains("show-more")) { tabs.classList.add("show-more"); $("tabToggle").textContent = "Fewer services −"; }
     tabs.querySelectorAll("button[data-k]").forEach(b => b.setAttribute("aria-selected", b.dataset.k === name));
     panel.classList.remove("all-rows");
+    const sel = tabs.querySelector('[aria-selected="true"]');
+    if (sel) { const tr = tabs.getBoundingClientRect(), sr = sel.getBoundingClientRect(); if (sr.left < tr.left || sr.right > tr.right) tabs.scrollLeft += sr.left - tr.left - 20; }
     panel.innerHTML = `<p class="panel-desc">${esc(d.desc)}</p><div class="table-scroll"><table><thead><tr><th>Service</th><th>Starting price</th></tr></thead><tbody>${
-      d.rows.map(([s, p, f, n], ri) => `<tr class="${f ? "featured" : ""}${ri > 4 ? " row-more" : ""}"><td>${esc(s)}${n ? `<small class="row-note">${esc(n)}</small>` : ""}</td><td${/^\$|^From|^Free/.test(p) ? "" : ' class="quote"'}>${esc(p)}</td></tr>`).join("")
-    }</tbody></table></div>${d.rows.length > 5 ? `<button type="button" class="rows-toggle" id="rowsToggle" data-more="Show all ${d.rows.length} services">Show all ${d.rows.length} services</button>` : ""}${d.extras ? `<div class="extras"><span>${esc(d.extrasLabel || "Also included:")}</span>${d.extras.map(x => `<em>${esc(x)}</em>`).join("")}</div>` : ""}<div class="panel-cta"><span>${name === "Consultations" ? "Start with a free 20-minute call." : "Ready to get started?"}</span><a class="btn btn-primary" href="${ROOT}contact.html#quote" data-service="${esc(SERVICE_FOR_TAB[name] || "")}">${name === "Consultations" ? "Book a free call" : "Get a free quote"}</a></div>`;
+      d.rows.map(([s, p, f, n], ri) => `<tr class="${f ? "featured" : ""}${ri > 4 ? " row-more" : ""}"><td>${esc(nb(s))}${n ? `<small class="row-note">${esc(n)}</small>` : ""}</td><td${/^\$|^From|^Free/.test(p) ? "" : ' class="quote"'}>${esc(nb(p))}</td></tr>`).join("")
+    }</tbody></table></div>${d.rows.length > 5 ? `<button type="button" class="rows-toggle" id="rowsToggle" data-more="Show all ${d.rows.length} services">Show all ${d.rows.length} services</button>` : ""}${d.extras ? `<div class="extras"><span>${esc(d.extrasLabel || "Also included:")}</span>${d.extras.map(x => `<em>${esc(x)}</em>`).join("")}</div>` : ""}<div class="panel-cta"><span>${name === "Consultations" ? "Not sure which session you need?" : "Ready to get started?"}</span><a class="btn btn-primary" href="${ROOT}contact.html#quote" data-service="${esc(SERVICE_FOR_TAB[name] || "")}">${name === "Consultations" ? "Book a free call" : "Get a free quote"}</a></div>`;
   }
   Object.keys(PRICES).forEach(k => {
     const b = document.createElement("button");
@@ -437,7 +445,7 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
     tabs.appendChild(b);
   });
   const m = document.createElement("button"); m.type = "button"; m.className = "tab-toggle"; m.id = "tabToggle"; m.textContent = "Other services +";
-  m.addEventListener("click", () => { const on = tabs.classList.toggle("show-more"); m.textContent = on ? "Fewer services −" : "Other services +"; });
+  m.addEventListener("click", () => { const on = tabs.classList.toggle("show-more"); m.textContent = on ? "Fewer services −" : "Other services +"; if (on) tabs.scrollLeft = tabs.scrollWidth; });
   tabs.appendChild(m);
   panel.addEventListener("click", e => { const b = e.target.closest("#rowsToggle"); if (!b) return; const on = panel.classList.toggle("all-rows"); b.textContent = on ? "Show fewer" : b.dataset.more; });
   show(SLUGS[location.hash.slice(1)] || "Foreign-Owned (5472/1120)");
@@ -457,6 +465,10 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
   const days = Math.round((bd - now) / 86400000);
   best.classList.add("next");
   best.querySelector("b").dataset.away = days === 0 ? "Today" : days === 1 ? "Tomorrow" : "In " + days + " days";
+  const t = document.createElement("li"); t.className = "today";
+  t.innerHTML = "<b>Today</b><span>" + now.toLocaleDateString("en-GB", { day: "numeric", month: "long" }) + "</span>";
+  const after = [...list.querySelectorAll("li")].find(li => li.dataset.m && new Date(now.getFullYear(), +li.dataset.m - 1, +li.dataset.d) >= now);
+  list.insertBefore(t, after || null);
 })();
 
 /* ---------- Compliance check ---------- */
@@ -467,6 +479,7 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
   const Q = [
     { k: "type", q: "What type of company do you have?", o: [["llc", "U.S. LLC"], ["corp", "U.S. corporation"], ["none", "Not a U.S. company"]] },
     { k: "own", q: "Who owns the company?", o: [["one", "One owner, living outside the U.S."], ["multi", "Two or more owners, at least one outside the U.S."], ["us", "Only U.S. citizens or residents"]] },
+    { k: "txn", q: "During the year, did any money move between the company and you, your family, or another company you own? For example, you paid a formation, state, or registered agent fee for it yourself, put money into its bank account, or took money out.", o: [["yes", "Yes"], ["no", "No, nothing moved at all"], ["unsure", "I am not sure"]], skip: a => a.type !== "llc" || a.own !== "one" },
     { k: "state", q: "Where is the company registered?", o: [["wy", "Wyoming"], ["de", "Delaware"], ["nm", "New Mexico"], ["fl", "Florida"], ["other", "Another state"]] },
     { k: "filed", q: "Has the company filed its federal return (such as Form 5472) every year since it was formed?", o: [["yes", "Yes, every year"], ["no", "No, some years were missed"], ["new", "It was formed this year"], ["unsure", "I am not sure"]], skip: a => a.own === "us" },
     { k: "fbar", q: "Did the company hold more than $10,000 in total in accounts outside the U.S. at any time in the year?", o: YN },
@@ -476,7 +489,7 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
   function ask() {
     const q = Q[i];
     stepEl.textContent = "Question " + (i + 1) + " of " + Q.length;
-    bar.style.width = Math.round(i / Q.length * 100) + "%";
+    bar.style.width = (i / Q.length * 100).toFixed(3) + "%";
     back.hidden = trail.length === 0;
     body.innerHTML = `<p class="qz-q">${esc(q.q)}</p><div class="qz-opts">${q.o.map(([v, l]) => `<button type="button" class="qz-opt" data-v="${v}">${esc(l)}</button>`).join("")}</div>`;
   }
@@ -487,24 +500,25 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
   }
   function items() {
     const L = [];
-    if (a.own === "us") L.push(["Form 5472 generally does not apply", "It is mainly for foreign-owned companies. Your company may still need a business or individual return, which we also prepare.", "", "Not required"]);
-    else if (a.type === "corp") L.push(["Form 1120 with Form 5472", "A U.S. corporation files Form 1120 each year, with Form 5472 when it is at least 25% foreign-owned.", "from $300", "Likely required"]);
-    else if (a.own === "multi") L.push(["Form 1065 partnership return + Schedules K-1", "An LLC with two or more owners is usually taxed as a partnership. Foreign partners can bring extra reporting.", "from $300", "Likely required"]);
-    else L.push(["Form 5472 + Pro Forma 1120", "Needed each year by most foreign-owned single-member LLCs, even in a year with no income.", "from $200", "Likely required"]);
+    if (a.own === "us") L.push(["Form 5472 generally does not apply", "It is mainly for foreign-owned companies. Your company may still need a business or individual return, which we also prepare.", "", "Not required", "blog/form-5472-us-owners-and-corporations.html"]);
+    else if (a.type === "corp") L.push(["Form 1120 with Form 5472", "A U.S. corporation files Form 1120 each year, with Form 5472 when it is at least 25% foreign-owned.", "from $300", "Likely required", "blog/form-5472-us-owners-and-corporations.html#how-it-works-for-25-foreign-owned-u-s-corporations"]);
+    else if (a.own === "multi") L.push(["Form 1065 partnership return + Schedules K-1", "An LLC with two or more owners is usually taxed as a partnership. Foreign partners can bring extra reporting.", "from $300", "Likely required", "blog/form-1120-vs-form-1065.html"]);
+    else if (a.txn === "no") L.push(["Form 5472 may not be due this year", "If nothing at all moved between you and the LLC, no Form 5472 may be required for that year, but state fees or registered agent fees you paid personally can count, so check the whole year first." + (a.filed === "new" ? " The first year almost always needs a return, because formation costs and first funding are reportable." : ""), "", "To confirm", "blog/form-5472-no-income.html#truly-dormant-years"]);
+    else L.push(["Form 5472 + Pro Forma 1120", "Needed each year by most foreign-owned single-member LLCs, even in a year with no income.", "from $200", "Likely required", "form-5472.html"]);
     const corp = a.type === "corp";
     const S = {
-      wy: ["Wyoming annual report", "Due every year by the first day of the month your company was formed.", "$100 + state fee", "Required"],
-      de: corp ? ["Delaware franchise tax and annual report", "Due every year by March 1.", "$100 + state fee", "Required"] : ["Delaware annual LLC tax", "Due every year by June 1.", "$100 + state fee", "Required"],
-      nm: corp ? ["New Mexico corporate report", "New Mexico corporations file a periodic report with the state.", "$100 + state fee", "Required"] : ["New Mexico: no annual report", "New Mexico does not require an annual report from LLCs. Your federal filing still applies.", "", "Nothing to file"],
-      fl: ["Florida annual report", "Due every year between January 1 and May 1.", "$100 + state fee", "Required"],
-      other: ["State annual report or tax filing", "Most states require an annual report or tax filing. We confirm the exact rules for your state.", "$100 + state fee", "To confirm"]
+      wy: ["Wyoming annual report", "Due every year by the first day of the month your company was formed.", "$100 + state fee", "Required", "state-filings.html#wyoming"],
+      de: corp ? ["Delaware franchise tax and annual report", "Due every year by March 1.", "$100 + state fee", "Required", "state-filings.html#delaware"] : ["Delaware annual LLC tax", "Due every year by June 1.", "$100 + state fee", "Required", "state-filings.html#delaware"],
+      nm: corp ? ["New Mexico corporate report", "New Mexico corporations file a periodic report with the state.", "$100 + state fee", "Required", "state-filings.html"] : ["New Mexico: no annual report", "New Mexico does not require an annual report from LLCs. Your federal filing still applies.", "", "Nothing to file", "state-filings.html#new-mexico"],
+      fl: ["Florida annual report", "Due every year between January 1 and May 1.", "$100 + state fee", "Required", "state-filings.html#florida"],
+      other: ["State annual report or tax filing", "Most states require an annual report or tax filing. We confirm the exact rules for your state.", "$100 + state fee", "To confirm", "state-filings.html"]
     };
     if (S[a.state]) L.push(S[a.state]);
-    if (a.filed === "no") L.push(["Catch-up filing for missed years", "Each missed Form 5472 can carry a $25,000 IRS penalty. We file the missed years and, where it applies, a reasonable cause statement.", "quoted by years missed", "Act soon"]);
-    if (a.filed === "unsure") L.push(["Filing history review", "We check which years were filed and which are missing, then catch up any gaps.", "quoted if years are missing", "To confirm"]);
-    if (a.fbar === "yes") L.push(["FBAR (FinCEN Form 114)", "Required when accounts outside the U.S. total more than $10,000 at any time in the year.", "from $150", "Likely required"]);
-    if (a.fbar === "unsure") L.push(["FBAR (FinCEN Form 114)", "Required only if accounts outside the U.S. total more than $10,000. We confirm this with you.", "from $150", "To confirm"]);
-    if (a.irs === "yes") L.push(["IRS notice review", "We review the letter, explain your options, and prepare a response where needed.", "from $150", "Urgent"]);
+    if (a.filed === "no") L.push(["Catch-up filing for missed years", "Each missed Form 5472 can carry a $25,000 IRS penalty. We file the missed years and, where it applies, a reasonable cause statement.", "quoted by years missed", "Act soon", "late-filings.html"]);
+    if (a.filed === "unsure") L.push(["Filing history review", "We check which years were filed and which are missing, then catch up any gaps.", "quoted if years are missing", "To confirm", "late-filings.html"]);
+    if (a.fbar === "yes") L.push(["FBAR (FinCEN Form 114)", "Required when accounts outside the U.S. total more than $10,000 at any time in the year.", "from $150", "Likely required", "blog/us-llc-tax-glossary.html#fbar"]);
+    if (a.fbar === "unsure") L.push(["FBAR (FinCEN Form 114)", "Required only if accounts outside the U.S. total more than $10,000. We confirm this with you.", "from $150", "To confirm", "blog/us-llc-tax-glossary.html#fbar"]);
+    if (a.irs === "yes") L.push(["IRS notice review", "We review the letter, explain your options, and prepare a response where needed.", "from $150", "Urgent", "late-filings.html#irs-letter"]);
     return L;
   }
   function result() {
@@ -517,10 +531,16 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
     const L = items();
     const tagClass = g => /Urgent|Act soon/.test(g) ? "hot" : /Not required|Nothing/.test(g) ? "off" : /confirm/.test(g) ? "chk" : "req";
     const summary = L.filter(x => !/Not required|Nothing/.test(x[3])).map(x => x[0]).join("; ");
+    const route = a.irs === "yes" ? { svc: "Late filing or IRS notice", card: "IRS letter" }
+      : a.filed === "no" ? { svc: "Late filing or IRS notice", card: "Missed years" }
+      : a.own === "multi" ? { svc: "Business tax return (1120 / 1065)", card: "Something else" }
+      : a.own === "us" ? { svc: "State filing or annual report", card: "Something else" }
+      : { svc: "Form 5472 + Pro Forma 1120 (foreign-owned U.S. business)", card: "File this year" };
     body.innerHTML = `<h3 class="qz-h">Your filing checklist</h3><p class="qz-p">Based on your answers, this is what your company most likely needs.</p>
-      <ul class="qz-list">${L.map(([n, d, p, g]) => `<li><span class="qz-tag ${tagClass(g)}">${esc(g)}</span><b>${esc(n)}</b><span class="qz-d">${esc(d)}</span>${p ? `<em>${esc(p)}</em>` : ""}</li>`).join("")}</ul>
-      <div class="btns"><a class="btn btn-primary" href="${quote}" id="qzCta" data-service="Form 5472 + Pro Forma 1120 (foreign-owned U.S. business)">Get a free quote for this</a><button type="button" class="again">Start again</button></div>`;
-    $("qzCta").addEventListener("click", () => carryNote("From my compliance check: " + summary));
+      <ul class="qz-list">${L.map(([n, d, p, g, h]) => `<li><span class="qz-tag ${tagClass(g)}">${esc(g)}</span><b>${esc(nb(n))}</b><span class="qz-d">${esc(d)}${h ? ` <a href="${esc(ROOT + h)}" aria-label="How this works: ${esc(n)}">How this works</a>` : ""}</span>${p ? `<em>${esc(nb(p))}</em>` : ""}</li>`).join("")}</ul>
+      <div class="btns"><a class="btn btn-primary" href="${quote}" id="qzCta" data-service="${esc(route.svc)}">Get a free quote for this</a><button type="button" class="again">Start again</button></div>`;
+    if (window.gtag) gtag("event", "checker_complete", { type: a.type || "", own: a.own || "", state: a.state || "", filed: a.filed || "", fbar: a.fbar || "", irs_notice: a.irs || "" });
+    $("qzCta").addEventListener("click", () => { store.set("mt_card", route.card); carryNote("From my compliance check: " + summary); if (window.gtag) gtag("event", "checker_quote_click", { route: route.card }); });
   }
   body.addEventListener("click", ev => {
     const o = ev.target.closest(".qz-opt");
@@ -548,7 +568,7 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
     text = "Estimate: " + picked.join(", ") + " · " + y + " tax year" + (y > 1 ? "s" : "") + " · est. $" + once + (monthly ? " + $" + monthly + "/mo" : "");
   }
   box.addEventListener("change", calc); calc();
-  cta.addEventListener("click", () => carryNote(text));
+  cta.addEventListener("click", () => { if (+yrs.value > 1) store.set("mt_card", "Missed years"); carryNote(text); if (window.gtag) gtag("event", "estimator_quote_click", { years: +yrs.value }); });
 })();
 
 /* ---------- FAQ: show more ---------- */
@@ -566,6 +586,7 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
   form.addEventListener("submit", async e => {
     e.preventDefault(); msg.hidden = false;
     if (!$("r-name").value.trim() || !$("r-text").value.trim()) { msg.textContent = "Please add your name and your review."; return; }
+    if (!form.querySelector('input[name="rating"]:checked')) { msg.textContent = "Please choose a star rating."; return; }
     if (!$("r-consent").checked) { msg.textContent = "Please tick the box to agree that we may publish your review."; return; }
     if (!SETTINGS.formEndpoint) { msg.textContent = "Online reviews are not active yet. Please send your review to us by email or WhatsApp. Thank you!"; return; }
     msg.textContent = "Sending…";
@@ -610,7 +631,7 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
 
   const checked = n => form.querySelector(`input[name="${n}"]:checked`);
   const val = n => { const c = checked(n); return c ? c.value : ""; };
-  const say = t => { msg.textContent = t; msg.hidden = !t; };
+  const say = (t, kind = "error") => { msg.textContent = t; msg.hidden = !t; msg.dataset.kind = kind; };
   const missed = () => [...form.querySelectorAll('input[name="missed_years"]:checked')].map(c => c.value);
 
   function buildYears() {
@@ -693,12 +714,12 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
     catch (_) { b.textContent = "Please copy by hand"; }
   });
 
-  const svc = store.take("mt_service"), note = store.take("mt_msg");
-  if (svc) {
-    service.value = svc;
-    const card = svc === MAIN ? "File this year" : svc === LATE ? "Missed years" : "Something else";
+  const svc = store.take("mt_service"), note = store.take("mt_msg"), want = store.take("mt_card");
+  if (svc || want) {
+    if (svc) service.value = svc;
+    const card = want || (svc === MAIN ? "File this year" : svc === LATE ? "Missed years" : "Something else");
     const r = form.querySelector(`input[name="situation"][value="${card}"]`); if (r) r.checked = true;
-    sync(); if (card === "Something else") service.value = svc;
+    sync(); if (card === "Something else" && svc) service.value = svc;
   }
   if (note) { const m = $("f-msg"); if (m && !m.value) m.value = note + "\n"; }
 
@@ -707,17 +728,18 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
     if (step < 2) { forward(); return; }
     const name = $("f-name").value.trim(), email = $("f-email").value.trim();
     if (!name || !/^\S+@\S+\.\S+$/.test(email)) { say("Please enter your full name and a valid email address."); return; }
-    rescue.hidden = true; say("Sending…"); send.disabled = true;
+    rescue.hidden = true; say("Sending…", "info"); send.disabled = true;
     const s = val("situation"), years = missed(), data = new FormData(form);
     data.delete("missed_years");
     if (s === "Missed years" && years.length) data.set("missed_years", years.join(", "));
     if (s !== "IRS letter") { data.delete("letter_date"); data.delete("notice_number"); }
     data.set("_subject", `New quote request: ${s}`);
+    try { const land = sessionStorage.getItem("mt_land"); if (land) data.set("landing_page", land); } catch (_) {}
     try {
       const r = await fetch(SETTINGS.formEndpoint, { method: "POST", body: data, headers: { Accept: "application/json" } }); if (!r.ok) throw 0;
-      if (window.gtag) gtag("event", "generate_lead", { form: "quote" });
+      if (window.gtag) gtag("event", "generate_lead", { form: "quote", situation: s });
       steps.forEach(el => { el.hidden = true; }); $("qfNav").hidden = true; $("qfSecure").hidden = true; $("qfTrack").hidden = true;
-      say(`Thank you, ${name.split(" ")[0]}. We have your request and will reply within 30 minutes on working days. Please check your spam folder if you do not see our email.`);
+      say(`Thank you, ${name.split(" ")[0]}. We have your request and will reply within 30 minutes on working days. Please check your spam folder if you do not see our email.`, "ok");
       msg.focus({ preventScroll: true }); form.scrollIntoView({ behavior: "smooth" });
     } catch (_) {
       say("We could not send your request just now.");
@@ -752,9 +774,17 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
 
 /* ---------- Phone action bar: show after the top section ---------- */
 (function () {
-  const bar = $("mBar"), hero = document.querySelector(".hero, .page-hero"); if (!bar || !hero) return;
-  const upd = () => bar.classList.toggle("show", window.scrollY > hero.offsetHeight - 160);
-  window.addEventListener("scroll", upd, { passive: true }); upd();
+  const bar = $("mBar"); if (!bar) return;
+  const hero = document.querySelector(".hero, .page-hero"), ctas = document.querySelector(".hero-ctas"), onForm = !!$("quote");
+  /* Show WhatsApp and the quote button at once, except while the page's own hero buttons are on screen
+     (so the same button is never shown twice) and at the top of the page that holds the quote form. */
+  const upd = () => {
+    let show = true;
+    if (onForm) show = !hero || window.scrollY > hero.offsetHeight - 160;
+    else if (ctas) { const r = ctas.getBoundingClientRect(); show = r.bottom < 0 || r.top > window.innerHeight; }
+    bar.classList.toggle("show", show);
+  };
+  window.addEventListener("scroll", upd, { passive: true }); window.addEventListener("resize", upd); upd();
 })();
 
 /* ---------- Google Analytics ---------- */
@@ -783,6 +813,9 @@ function carryNote(text) { store.set("mt_msg", text); const m = $("f-msg"); if (
     if (h.indexOf("mailto:") === 0) ev = "email_click";
     else if (h.indexOf("wa.me/") > -1) ev = "whatsapp_click";
     else if (h.indexOf("calendly.com") > -1) ev = "book_call_click";
-    if (ev) gtag("event", ev, { link_url: h, page_path: location.pathname });
+    if (ev) gtag("event", ev, { link_url: h.split("?")[0], page_path: location.pathname, button: a.id || a.className || "" });
   }, true);
 })();
+
+/* ---------- Mark the current page inside the Services menu ---------- */
+document.querySelectorAll(".sub a").forEach(a => { if (a.pathname === location.pathname && !a.hash) a.setAttribute("aria-current", "page"); });
