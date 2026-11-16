@@ -2,7 +2,7 @@
 
 > Meritline Tax Services is an online U.S. tax compliance service for people outside the United States who own a U.S. LLC. It prepares and files Form 5472 with the pro forma Form 1120 for foreign-owned single-member LLCs, state annual reports and state tax returns, Form 7004 extensions, FBAR (FinCEN Form 114), and catch-up filings with reasonable cause statements for missed years. Clients in any country are served fully online by email and WhatsApp, with a fixed written quote before any work begins.
 
-Last updated: 2026-11-09
+Last updated: 2026-11-16
 
 ## Business facts
 
@@ -73,6 +73,7 @@ State fees, government fees and any tax owed are paid separately.
 - [Form 1120 vs. Form 1065: Which Tax Return Does Your U.S. Business File?](https://meritlinetaxservices.com/blog/form-1120-vs-form-1065.html)
 - [Tax Deadlines 2027: When Are U.S. Taxes Due? A Calendar for Businesses and Individuals](https://meritlinetaxservices.com/blog/us-tax-deadlines-2027.html)
 - [U.S. LLC Tax Glossary for Foreign Owners: 52 Terms Explained in Plain English](https://meritlinetaxservices.com/blog/us-llc-tax-glossary.html): plain-English definitions of 52 terms, from Form 5472 and disregarded entity to ECI, FBAR, and franchise tax
+- [Test post from the admin page](https://meritlinetaxservices.com/blog/test-post-from-the-admin-page.html): A test post that checks the Meritline Tax blog admin page can build a post, its cards and its share picture from the live website files
 
 ## Guides by country of residence
 
