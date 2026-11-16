@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://api.github.com; frame-src 'self'; child-src 'self'; worker-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Blog admin</title>
+<link rel="stylesheet" href="admin.css?v=20261116">
+<script type="module" src="js/app.js?v=20261116"></script>
+</head>
+<body>
+<a class="skip" href="#app">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-in">
+    <span class="brand"><span class="brand-full">Meritline blog admin</span><span class="brand-short">Blog admin</span></span>
+    <nav class="topbar-links" aria-label="Admin">
+      <a id="view-site" href="../" target="_blank" rel="noopener noreferrer">View website</a>
+      <button type="button" class="textbtn" id="sign-out" hidden>Sign out</button>
+    </nav>
+  </div>
+</header>
+
+<main id="app" data-screen="signin" data-busy="false" tabindex="-1">
+  <noscript><p class="msg msg-error">This page needs JavaScript. Turn it on in your browser settings and reload the page.</p></noscript>
+  <p id="boot-msg" class="msg msg-info boot-msg">This page works only on your website: open https://meritlinetaxservices.com/admin/ in Chrome or Edge. If you are already there, reload the page.</p>
+
+  <div id="app-error" class="msg msg-error" role="alert" hidden>
+    <p id="app-error-text"></p>
+    <button type="button" class="textbtn" id="app-error-dismiss">Dismiss</button>
+  </div>
+
+  <div id="site-problem" class="msg msg-warn" role="status" hidden>
+    <p id="site-problem-text"></p>
+    <details class="tech"><summary>Technical details</summary><p id="site-problem-detail"></p></details>
+  </div>
+
+  <!-- Sign in -->
+  <section id="screen-signin" class="screen" aria-labelledby="signin-h1" hidden>
+    <h1 id="signin-h1">Blog admin</h1>
+    <p class="lead">Write and publish blog posts on meritlinetaxservices.com.</p>
+    <p id="signin-note" class="msg msg-info" role="status" hidden></p>
+    <form id="signin-form" class="panel" novalidate>
+      <div class="field">
+        <label for="key">Access key</label>
+        <input id="key" type="password" autocomplete="off" spellcheck="false" autocapitalize="off" aria-describedby="key-hint">
+        <p class="field-msg is-warning" id="key-format" hidden>This does not look like a GitHub access key. It should start with github_pat_.</p>
+        <p class="hint" id="key-hint">Starts with github_pat_. You create it once on GitHub, then paste it here. Lost your key? Create a new one with the steps below.</p>
+      </div>
+      <div class="field field-check">
+        <input type="checkbox" id="remember" aria-describedby="remember-hint">
+        <label for="remember">Remember on this computer</label>
+        <p class="hint" id="remember-hint">If you leave this unticked, you paste the key again each time you open this page. Tick it only on your own computer: anyone who uses this browser could then publish to your website. The key is forgotten after 30 days without use, and when you sign out.</p>
+      </div>
+      <div id="signin-error" class="msg msg-error" role="alert" hidden></div>
+      <div class="actions">
+        <button type="submit" class="btn btn-primary" id="signin-submit">Sign in</button>
+      </div>
+    </form>
+    <details id="key-help" class="help">
+      <summary>How to create your access key</summary>
+      <div class="help-body">
+        <p><a id="key-help-link" href="https://github.com/settings/personal-access-tokens/new?name=Meritline+blog+admin&amp;description=Lets+the+website+admin+page+publish+blog+posts.&amp;target_name=winner072&amp;expires_in=366&amp;contents=write" target="_blank" rel="noopener noreferrer">Create my key on GitHub</a></p>
+        <ol class="steps">
+          <li>Sign in to GitHub with the account that owns the website.</li>
+          <li>Open "Create my key on GitHub" above. If GitHub asks you to confirm your password or a code, do so. (Without the link: click your picture in the top-right corner, then Settings, then Developer settings at the bottom of the left menu, then Personal access tokens, then Fine-grained tokens, then Generate new token.)</li>
+          <li>Token name: leave "Meritline blog admin".</li>
+          <li>Expiration: leave one year. Put a reminder in your calendar a few days before it ends.</li>
+          <li>Resource owner: make sure it shows your GitHub account.</li>
+          <li>Repository access: choose "Only select repositories", then pick meritline-tax. Nothing else.</li>
+          <li>Permissions: in the repository permissions, Contents must say "Read and write". If it is missing, add Contents and set it to Read and write. Metadata shows Read-only by itself. That is normal. Add nothing else.</li>
+          <li>Click "Generate token" at the bottom, then copy the long code that starts with github_pat_. GitHub shows it only once. Save it in your password manager or another private place: you need it again each time you sign in.</li>
+          <li>Come back here, paste it into Access key and click Sign in.</li>
+          <li>Keep the key private. Never paste it into a post, an email or a website file. If someone may have seen it, delete it on the same GitHub page and create a new one.</li>
+          <li>Use only this kind of key (fine-grained, starting with github_pat_). Older keys that start with ghp_ can change every repository on your account, so this page does not accept them.</li>
+        </ol>
+      </div>
+    </details>
+  </section>
+
+  <!-- Posts -->
+  <section id="screen-list" class="screen" aria-labelledby="list-h1" hidden>
+    <div class="screen-head">
+      <h1 id="list-h1">Your posts</h1>
+      <button type="button" class="btn btn-primary" id="new-post">Write a new post</button>
+    </div>
+    <div id="repair-box" class="msg msg-warn" hidden>
+      <p id="repair-text"></p>
+      <p class="hint">This usually happens when website files are uploaded from a copy on your computer that does not have these posts. Before you upload blog.html, a topic page, sitemap.xml, feed.xml or llms.txt from your computer, download the current files from GitHub first (Code, then Download ZIP).</p>
+      <div class="actions"><button type="button" class="btn btn-ghost btn-small" id="repair-start">Put them back</button></div>
+    </div>
+    <div id="drafts-block" class="block" hidden>
+      <h2>Drafts on this computer</h2>
+      <ul id="drafts-list" class="rows"></ul>
+    </div>
+    <div class="block">
+      <h2>Published posts</h2>
+      <p id="posts-loading" class="quiet" hidden>Loading your posts...</p>
+      <ul id="posts-list" class="rows"></ul>
+      <p id="posts-empty" class="quiet" hidden>You have not published any posts from this page yet. Posts you publish here appear on your Blog page and on their topic page.</p>
+    </div>
+    <details id="hand-guides" class="help" hidden>
+      <summary id="hand-guides-summary">Guides written by hand (0)</summary>
+      <div class="help-body">
+        <p>These guides were written directly in the website files, so they can't be changed here. You can still link to them from your posts.</p>
+        <ul id="hand-guides-list" class="rows rows-tight"></ul>
+      </div>
+    </details>
+    <p class="block-end"><button type="button" class="textbtn" id="refresh">Refresh list</button></p>
+  </section>
+
+  <!-- Editor -->
+  <section id="screen-editor" class="screen" aria-labelledby="editor-h1" hidden>
+    <p class="back-top"><button type="button" class="textbtn" id="btn-back-top">Back to your posts</button></p>
+    <h1 id="editor-h1">New post</h1>
+    <div id="edit-note" class="msg msg-warn" hidden><p>This post was changed elsewhere after you started these changes. Publishing will replace those changes with yours. To start again from the version on the website, go back to your posts, choose Edit, then "Delete my changes and start from the published version".</p></div>
+    <div id="deleted-note" class="msg msg-warn" hidden><p>This post is no longer on the website. Publishing adds it again as a new post, so you can also change its web address.</p></div>
+
+    <section class="panel" aria-labelledby="sec-address">
+      <h2 id="sec-address">Title and web address</h2>
+      <div class="field">
+        <label for="f-title">Title</label>
+        <input id="f-title" type="text" autocomplete="off" spellcheck="true" aria-describedby="f-title-hint">
+        <p class="field-msg" data-for="f-title" hidden></p>
+        <p class="hint" id="f-title-hint">The headline readers see at the top of the post.</p>
+      </div>
+      <div class="field">
+        <label for="f-slug">Web address</label>
+        <div class="slug-row">
+          <span class="slug-part" aria-hidden="true">meritlinetaxservices.com/blog/</span>
+          <input id="f-slug" type="text" autocomplete="off" spellcheck="false" autocapitalize="off" inputmode="url" aria-describedby="f-slug-hint">
+          <span class="slug-part" aria-hidden="true">.html</span>
+        </div>
+        <p class="field-msg" data-for="f-slug" hidden></p>
+        <p class="hint" id="f-slug-hint">Made from the title. Lowercase letters, numbers and dashes only. It can't be changed after publishing.</p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="sec-where">
+      <h2 id="sec-where">Where it appears</h2>
+      <div class="field">
+        <label for="f-topic">Topic</label>
+        <select id="f-topic" aria-describedby="f-topic-hint"><option value="">Choose a topic</option></select>
+        <p class="field-msg" data-for="f-topic" hidden></p>
+        <p class="hint" id="f-topic-hint">The topic page that lists this post.</p>
+      </div>
+      <div class="field" id="region-field" hidden>
+        <label for="f-region">Group of countries</label>
+        <select id="f-region" aria-describedby="f-region-hint"><option value="">Choose a group of countries</option></select>
+        <p class="field-msg" data-for="f-region" hidden></p>
+        <p class="hint" id="f-region-hint">Where the post is listed on the topic page.</p>
+      </div>
+      <div class="field">
+        <label for="f-category">Card label</label>
+        <select id="f-category" aria-describedby="f-category-hint"><option value="">Choose a card label</option></select>
+        <label for="f-category-other" id="f-category-other-label" class="sublabel" hidden>Your own card label</label>
+        <input id="f-category-other" type="text" autocomplete="off" aria-describedby="f-category-hint" hidden>
+        <p class="field-msg" data-for="f-category" hidden></p>
+        <p class="hint" id="f-category-hint">The small label above the title on the post's card on the Blog page, for example Form 5472 or Penalties.</p>
+      </div>
+      <div class="field">
+        <label for="f-thumb">Card word</label>
+        <input id="f-thumb" type="text" autocomplete="off" aria-describedby="f-thumb-hint">
+        <p class="field-msg" data-for="f-thumb" hidden></p>
+        <p class="hint" id="f-thumb-hint">One or two words shown on the card, for example EIN or Sample. For a country guide, use the country name.</p>
+      </div>
+      <div class="field">
+        <label for="f-summary">Card summary</label>
+        <textarea id="f-summary" rows="3" aria-describedby="f-summary-hint"></textarea>
+        <p class="field-msg" data-for="f-summary" hidden></p>
+        <p class="hint" id="f-summary-hint">One or two sentences for the blog page.</p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="sec-opening">
+      <h2 id="sec-opening">Opening</h2>
+      <div class="field">
+        <label for="f-lead-answer">Short answer</label>
+        <textarea id="f-lead-answer" rows="3" aria-describedby="f-lead-answer-hint"></textarea>
+        <p class="field-msg" data-for="f-lead-answer" hidden></p>
+        <p class="hint" id="f-lead-answer-hint">The first sentence or two, shown in bold. Answer the reader's question directly.</p>
+      </div>
+      <div class="field">
+        <label for="f-lead-text">Rest of the opening paragraph</label>
+        <textarea id="f-lead-text" rows="3" aria-describedby="f-lead-text-hint"></textarea>
+        <p class="field-msg" data-for="f-lead-text" hidden></p>
+        <p class="hint" id="f-lead-text-hint">Optional.</p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="sec-kp">
+      <h2 id="sec-kp">Key points</h2>
+      <p class="hint hint-top">Optional. Short points shown in a box near the top.</p>
+      <div id="kp-list" class="rowset"></div>
+      <p class="field-msg" data-for="kp-list" hidden></p>
+      <p id="kp-undo" class="undo" role="status" hidden><span></span> <button type="button" class="textbtn" data-action="undo">Undo</button></p>
+      <button type="button" class="btn btn-ghost btn-small" id="kp-add">Add a key point</button>
+    </section>
+
+    <section class="panel" aria-labelledby="sec-article">
+      <h2 id="sec-article">Article</h2>
+      <div class="editor-tools">
+      <div id="body-toolbar" class="toolbar" role="toolbar" aria-label="Formatting">
+        <button type="button" data-cmd="h2" aria-pressed="false" title="A main heading. It also appears in the list at the top of the post.">Heading</button>
+        <button type="button" data-cmd="h3" aria-pressed="false" title="A smaller heading inside a section.">Subheading</button>
+        <button type="button" data-cmd="p" aria-pressed="false" title="Normal text.">Paragraph</button>
+        <button type="button" data-cmd="bold" aria-pressed="false" title="Bold text (Ctrl+B).">Bold</button>
+        <button type="button" data-cmd="italic" aria-pressed="false" title="Italic text (Ctrl+I).">Italic</button>
+        <button type="button" data-cmd="ul" aria-pressed="false" title="A list with bullet points.">Bulleted list</button>
+        <button type="button" data-cmd="ol" aria-pressed="false" title="Numbered steps. Start each step with a short bold title if you like.">Numbered list</button>
+        <button type="button" data-cmd="link" aria-pressed="false" title="Link to one of your guides, another page or a web address (Ctrl+K).">Link</button>
+        <button type="button" data-cmd="quote" aria-pressed="false" title="A highlighted note. Start it with a short bold sentence.">Note box</button>
+        <button type="button" data-cmd="table" title="A simple table with a heading row.">Table</button>
+        <button type="button" data-cmd="image" title="Add a picture from your computer.">Picture</button>
+      </div>
+      <div id="table-tools" class="subtools" role="toolbar" aria-label="Table" hidden>
+        <span class="subtools-label">Table:</span>
+        <button type="button" data-cmd="add-row">Add row</button>
+        <button type="button" data-cmd="add-col">Add column</button>
+        <button type="button" data-cmd="del-row">Remove row</button>
+        <button type="button" data-cmd="del-col">Remove column</button>
+        <button type="button" data-cmd="del-table">Remove table</button>
+      </div>
+      <div id="image-tools" class="subtools" role="toolbar" aria-label="Picture" hidden>
+        <span class="subtools-label">Picture:</span>
+        <button type="button" data-cmd="alt">Change description</button>
+        <button type="button" data-cmd="remove">Remove picture</button>
+      </div>
+      </div>
+      <div id="body-editor" class="editor-area" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Article text" aria-placeholder="Write the article here." spellcheck="true"></div>
+      <p class="field-msg" data-for="body-editor" hidden></p>
+      <p id="body-msg" class="field-msg" role="status" hidden></p>
+      <p class="hint">Paste from Word or Google Docs is cleaned up automatically. Pictures are added with the Picture button.</p>
+      <input type="file" id="image-input" accept="image/jpeg,image/png,image/webp" hidden>
+    </section>
+
+    <section class="panel" aria-labelledby="sec-faq">
+      <h2 id="sec-faq">Questions and answers</h2>
+      <p class="hint hint-top">Optional. Shown at the end of the post and to search engines.</p>
+      <div id="faq-list" class="rowset"></div>
+      <p class="field-msg" data-for="faq-list" hidden></p>
+      <p id="faq-undo" class="undo" role="status" hidden><span></span> <button type="button" class="textbtn" data-action="undo">Undo</button></p>
+      <button type="button" class="btn btn-ghost btn-small" id="faq-add">Add a question</button>
+    </section>
+
+    <section class="panel" aria-labelledby="sec-search">
+      <h2 id="sec-search">Search and sharing</h2>
+      <div class="field">
+        <label for="f-seo-title">Search title</label>
+        <input id="f-seo-title" type="text" autocomplete="off" aria-describedby="f-seo-title-hint seo-title-count">
+        <p class="field-msg" data-for="f-seo-title" hidden></p>
+        <p class="hint" id="f-seo-title-hint">Optional. The title shown in Google. Leave empty to use the post title.</p>
+        <p class="count" id="seo-title-count">0 of 60 characters</p>
+      </div>
+      <div class="field">
+        <label for="f-description">Search description</label>
+        <textarea id="f-description" rows="3" aria-describedby="f-description-hint description-count"></textarea>
+        <p class="field-msg" data-for="f-description" hidden></p>
+        <p class="hint" id="f-description-hint">Shown under the title in Google. Aim for 120 to 160 characters.</p>
+        <p class="count" id="description-count">0 characters</p>
+      </div>
+      <div class="field">
+        <span class="label">Share picture</span>
+        <div class="og-box">
+          <img id="og-preview" alt="Share picture made from the title" width="600" height="315" hidden>
+          <p id="og-empty" class="quiet">The share picture appears here when the post has a title.</p>
+        </div>
+        <p class="hint">Made from the title. Used when the post is shared on social media.</p>
+        <p id="og-warning" class="field-msg is-warning" hidden>This title is too long for the share picture. Shorten it so it fits.</p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="sec-dates">
+      <h2 id="sec-dates">Dates</h2>
+      <div class="field">
+        <label for="f-rules-date">Rules checked as of</label>
+        <input id="f-rules-date" type="date" aria-describedby="f-rules-date-hint">
+        <p class="field-msg" data-for="f-rules-date" hidden></p>
+        <p class="hint" id="f-rules-date-hint">The date you last checked the rules. Shown in the note at the end of the post.</p>
+      </div>
+      <div class="field" id="published-field">
+        <label for="f-published">Published date</label>
+        <input id="f-published" type="date" aria-describedby="f-published-hint">
+        <p class="field-msg" data-for="f-published" hidden></p>
+        <p class="hint" id="f-published-hint">Usually today.</p>
+      </div>
+      <dl class="facts" id="published-facts" hidden>
+        <div><dt>Published</dt><dd id="fact-published"></dd></div>
+        <div><dt>Last updated</dt><dd id="fact-modified"></dd></div>
+      </dl>
+    </section>
+
+    <div id="form-error" class="msg msg-error" role="alert" hidden><p id="form-error-text">Fix the items marked above before publishing.</p></div>
+
+    <div class="editor-foot">
+      <button type="button" class="textbtn" id="btn-back">Back to your posts</button>
+      <button type="button" class="textbtn" id="btn-discard">Delete draft</button>
+      <span class="inline-confirm" id="discard-confirm" hidden>
+        <span id="discard-confirm-text">Delete this draft? This can't be undone.</span>
+        <button type="button" class="textbtn" id="discard-yes">Yes</button>
+        <button type="button" class="textbtn" id="discard-no">No</button>
+      </span>
+    </div>
+
+    <div id="editor-actions" class="actionbar">
+      <div class="actionbar-in">
+        <div class="actionbar-status" aria-live="polite">
+          <p id="draft-status" class="draft-status"></p>
+          <p id="editor-msg" class="editor-msg" hidden></p>
+        </div>
+        <div class="actionbar-buttons">
+          <button type="button" class="btn btn-ghost" id="btn-preview">Preview</button>
+          <button type="button" class="btn btn-primary" id="btn-publish">Publish</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Preview -->
+  <section id="screen-preview" class="screen screen-wide" aria-labelledby="preview-h1" hidden>
+    <div class="screen-head">
+      <h1 id="preview-h1">Preview</h1>
+      <div id="preview-width" class="seg" role="group" aria-label="Preview width">
+        <button type="button" data-width="desktop" aria-pressed="true">Computer</button>
+        <button type="button" data-width="phone" aria-pressed="false">Phone</button>
+      </div>
+      <div class="preview-actions">
+        <button type="button" class="btn btn-ghost" id="preview-close">Back to editing</button>
+        <button type="button" class="btn btn-primary" id="preview-publish">Publish</button>
+      </div>
+    </div>
+    <p class="quiet">This is how the post will look on the website. Links are switched off in the preview.</p>
+    <p id="preview-note" class="msg msg-warn" hidden>No topic is chosen yet, so the preview shows the post under a sample topic. Choose a topic before publishing.</p>
+    <div class="preview-stage" id="preview-stage">
+      <iframe id="preview-frame" sandbox="allow-same-origin" referrerpolicy="no-referrer" title="Post preview"></iframe>
+    </div>
+  </section>
+
+  <!-- Confirm -->
+  <section id="screen-confirm" class="screen" aria-labelledby="confirm-h1" hidden>
+    <h1 id="confirm-h1">Ready to publish?</h1>
+    <div class="panel">
+      <p class="post-title" id="confirm-title"></p>
+      <p>These changes will be made to your website in one step:</p>
+      <ul id="confirm-list" class="rows rows-tight"></ul>
+      <div id="confirm-notes" class="msg msg-warn" hidden></div>
+      <figure id="confirm-og-box" class="og-figure" hidden>
+        <figcaption>Share picture (shown when the post is shared on social media)</figcaption>
+        <div class="og-box"><img id="confirm-og" alt="New share picture" width="600" height="315"></div>
+      </figure>
+      <p class="quiet">If anything goes wrong, nothing on the website changes.</p>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="confirm-publish">Publish now</button>
+        <button type="button" class="btn btn-ghost" id="confirm-cancel">Back to editing</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Working -->
+  <section id="screen-working" class="screen" aria-labelledby="working-h1" hidden>
+    <h1 id="working-h1">Publishing...</h1>
+    <div class="panel">
+      <p id="working-status" class="working-status" aria-live="polite">Reading the website...</p>
+    </div>
+  </section>
+
+  <!-- Result -->
+  <section id="screen-result" class="screen" aria-labelledby="result-h1" hidden>
+    <h1 id="result-h1">Published</h1>
+    <div class="panel">
+      <p id="result-text"></p>
+      <p id="result-url-line"><a id="result-url" href="../" target="_blank" rel="noopener noreferrer"></a></p>
+      <p id="live-status" class="live-status" aria-live="polite"></p>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="result-done">Back to your posts</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Delete -->
+  <section id="screen-delete" class="screen" aria-labelledby="delete-h1" hidden>
+    <h1 id="delete-h1">Delete this post?</h1>
+    <div class="panel">
+      <p class="post-title" id="delete-title"></p>
+      <p>This removes:</p>
+      <ul id="delete-list" class="rows rows-tight"></ul>
+      <div id="delete-notes" class="msg msg-warn" hidden></div>
+      <div class="msg msg-error"><p>You can't undo this from this page.</p><p id="delete-draft-note" hidden>Your unpublished changes to this post on this computer will also be deleted.</p></div>
+      <div id="delete-links" class="msg msg-warn" hidden>
+        <p>These posts link to it. Edit them afterwards to remove the links:</p>
+        <ul id="delete-links-list"></ul>
+      </div>
+      <div class="field">
+        <label for="delete-confirm-input">Type DELETE to confirm</label>
+        <input id="delete-confirm-input" type="text" autocomplete="off" spellcheck="false" autocapitalize="characters">
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="delete-submit" disabled>Delete post</button>
+        <button type="button" class="btn btn-ghost" id="delete-cancel">Cancel</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Link dialog -->
+<dialog id="link-dialog" class="dialog" aria-labelledby="link-dialog-h">
+  <h2 id="link-dialog-h">Add a link</h2>
+  <fieldset class="choices">
+    <legend class="label">Link to</legend>
+    <div class="choice">
+      <input type="radio" name="link-kind" id="link-kind-guide" value="guide">
+      <label for="link-kind-guide">One of your guides</label>
+    </div>
+    <div class="choice-field" data-kind="guide">
+      <select id="link-guide" aria-label="Guide"></select>
+    </div>
+    <div class="choice">
+      <input type="radio" name="link-kind" id="link-kind-page" value="page">
+      <label for="link-kind-page">Another page on this website</label>
+    </div>
+    <div class="choice-field" data-kind="page">
+      <select id="link-page" aria-label="Page"></select>
+    </div>
+    <div class="choice">
+      <input type="radio" name="link-kind" id="link-kind-url" value="url">
+      <label for="link-kind-url">A web address</label>
+    </div>
+    <div class="choice-field" data-kind="url">
+      <input id="link-url" type="url" autocomplete="off" spellcheck="false" autocapitalize="off" aria-label="Web address" aria-describedby="link-url-hint">
+      <p class="hint" id="link-url-hint">Starts with https://</p>
+    </div>
+  </fieldset>
+  <p id="link-error" class="field-msg is-error" role="alert" hidden>This web address can't be used. It must start with https://.</p>
+  <div class="actions">
+    <button type="button" class="btn btn-primary" id="link-apply">Add link</button>
+    <button type="button" class="btn btn-ghost" id="link-remove" hidden>Remove link</button>
+    <button type="button" class="textbtn" id="link-cancel">Cancel</button>
+  </div>
+</dialog>
+
+<!-- Picture dialog -->
+<dialog id="image-dialog" class="dialog" aria-labelledby="image-dialog-h">
+  <h2 id="image-dialog-h">Add a picture</h2>
+  <div class="thumb-box"><img id="image-thumb" alt=""></div>
+  <p id="image-size" class="quiet"></p>
+  <div class="field">
+    <label for="image-alt">Describe the picture</label>
+    <textarea id="image-alt" rows="3" maxlength="400" aria-describedby="image-alt-hint"></textarea>
+    <p class="hint" id="image-alt-hint">Required. Say what the picture shows, for readers who can't see it.</p>
+  </div>
+  <p id="image-error" class="field-msg is-error" role="alert" hidden></p>
+  <div class="actions">
+    <button type="button" class="btn btn-primary" id="image-insert">Add picture</button>
+    <button type="button" class="textbtn" id="image-cancel">Cancel</button>
+  </div>
+</dialog>
+</body>
+</html>
