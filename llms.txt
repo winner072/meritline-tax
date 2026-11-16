@@ -73,7 +73,6 @@ State fees, government fees and any tax owed are paid separately.
 - [Form 1120 vs. Form 1065: Which Tax Return Does Your U.S. Business File?](https://meritlinetaxservices.com/blog/form-1120-vs-form-1065.html)
 - [Tax Deadlines 2027: When Are U.S. Taxes Due? A Calendar for Businesses and Individuals](https://meritlinetaxservices.com/blog/us-tax-deadlines-2027.html)
 - [U.S. LLC Tax Glossary for Foreign Owners: 52 Terms Explained in Plain English](https://meritlinetaxservices.com/blog/us-llc-tax-glossary.html): plain-English definitions of 52 terms, from Form 5472 and disregarded entity to ECI, FBAR, and franchise tax
-- [Test post from the admin page](https://meritlinetaxservices.com/blog/test-post-from-the-admin-page.html): A test post that checks the Meritline Tax blog admin page can build a post, its cards and its share picture from the live website files
 
 ## Guides by country of residence
 
