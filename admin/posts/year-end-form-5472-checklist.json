@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "id": "949201d35708d5aa",
+  "slug": "year-end-form-5472-checklist",
+  "title": "Year-End Form 5472 Checklist: What to Record Before December 31",
+  "seoTitle": "Year-End Form 5472 Checklist: What to Record by Dec 31",
+  "description": "A year-end checklist for foreign-owned LLC owners: what to record before December 31 so your 2026 Form 5472 is complete, accurate, and quick to file.",
+  "topic": "topic-form-5472",
+  "region": "",
+  "card": {
+    "category": "Form 5472",
+    "thumb": "Year-end",
+    "summary": "What to record before the year closes: which year each payment belongs to, a 10-item checklist, and the mistakes to avoid."
+  },
+  "lead": {
+    "answer": "For a calendar-year LLC, anything that moves between you and your company by December 31, 2026 belongs on the 2026 Form 5472.",
+    "text": "Gathering those facts now, while the year is still open and your bank statements are fresh, is far easier than rebuilding them in April. This checklist shows what to record, which year each item belongs to, and the mistakes that lead to incomplete returns."
+  },
+  "keyPoints": [
+    {
+      "bold": "The 2026 form closes on December 31.",
+      "text": "For most single-member LLCs the tax year is the calendar year, so transactions dated through that day go on the 2026 return."
+    },
+    {
+      "bold": "Only dealings with related parties are reportable.",
+      "text": "That means you and anyone related to you, not ordinary sales to customers or purchases from suppliers."
+    },
+    {
+      "bold": "Find gaps before the year ends.",
+      "text": "A missing transfer or an unrecorded expense is simple to fix in December and slow to trace in April."
+    },
+    {
+      "bold": "The penalty is $25,000 per form, per year",
+      "text": "for a late, missing, or substantially incomplete Form 5472."
+    },
+    {
+      "bold": "Nothing here asks you to move money.",
+      "text": "Never shift or backdate a transfer just to change the year it falls in."
+    }
+  ],
+  "bodyHtml": "<h2 id=\"why-year-end-is-the-right-time\">Why year-end is the right time</h2>\n<p>Form 5472 reports what happened between your LLC and its related parties during one tax year. For most foreign-owned single-member LLCs that year is the calendar year, so the 2026 return closes on December 31, 2026. If your LLC uses a different year-end, use that date instead.</p>\n<p>The return is not due until April 15, 2027, or October 15, 2027 with a Form 7004 extension. But the facts it reports are fixed when the year ends. Details fade, payment apps change what they show, and every foreign-currency amount has to be matched to a date. An hour of tidying now saves many hours later. For every date, see <a href=\"form-5472-deadline-2026-2027.html\">Form 5472 Deadline 2026 and 2027: IRS Due Dates for Foreign-Owned LLCs</a>.</p>",
+  "faq": [
+    {
+      "q": "Does a transaction dated December 31 count for 2026?",
+      "a": "For a calendar-year LLC, yes. A transaction dated on or before December 31, 2026 belongs to the 2026 year. Use the transaction date and keep the record that shows it."
+    },
+    {
+      "q": "Do I need to record sales to customers on Form 5472?",
+      "a": "Ordinary sales to unrelated customers and purchases from unrelated suppliers are not reportable on Form 5472, although you still need them in your books. The form covers dealings between the LLC and you or other related parties."
+    },
+    {
+      "q": "My LLC has no bank account. Do I still have anything to record?",
+      "a": "Often yes. State fees and registered agent fees you pay personally are payments made for the LLC, and they can be reportable. Check the whole year before you decide there is nothing to report."
+    },
+    {
+      "q": "Is the penalty smaller for a small mistake?",
+      "a": "The penalty is $25,000 per form, per year, for a late, missing, or substantially incomplete Form 5472. A form with required information left out can be treated as incomplete, so accuracy matters more than the size of the amounts."
+    },
+    {
+      "q": "Can you review my year before it closes?",
+      "a": "Yes. Send us a summary of your 2026 transfers and expenses, and we will confirm what must be reported and prepare the return from $200, with the fixed price confirmed in writing first."
+    }
+  ],
+  "rulesAsOf": "2026-11-18",
+  "published": "2026-11-17",
+  "modified": "2026-11-17",
+  "images": []
+}
