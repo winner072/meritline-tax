@@ -11,6 +11,7 @@ const SETTINGS = {
   formEndpoint: "https://formspree.io/f/mrpeyvzn",   // your Formspree form URL, e.g. "https://formspree.io/f/mrpeyvzn"
   bookingUrl: "https://calendly.com/winnermwn/30min",     // your Calendly (or similar) link for the free 20-minute call
   analyticsId: "G-T31R5VJ5VD",   // your Google Analytics measurement ID (leave empty to switch analytics off)
+  plausibleSrc: "https://plausible.io/js/pa-RPxzdOBj1_tMPM9G2dBQa.js",   // your Plausible script address (leave empty to switch Plausible off)
   uploadUrl: "",      // your secure document upload / client portal link
   ptin: "",           // your PTIN once issued, e.g. "P01234567"
   ptinName: "",       // name of the person the PTIN belongs to, e.g. "Jane Doe"
@@ -815,6 +816,16 @@ const nb = s => String(s).replace(/Pro Forma 1120/g, "Pro\u00a0Forma\u00a01120")
     else if (h.indexOf("calendly.com") > -1) ev = "book_call_click";
     if (ev) gtag("event", ev, { link_url: h.split("?")[0], page_path: location.pathname, button: a.id || a.className || "" });
   }, true);
+})();
+
+/* ---------- Plausible Analytics (counts visits without cookies) ---------- */
+(function () {
+  const src = SETTINGS.plausibleSrc; if (!src) return;
+  window.plausible = window.plausible || function () { (plausible.q = plausible.q || []).push(arguments); };
+  plausible.init = plausible.init || function (i) { plausible.o = i || {}; };
+  const s = document.createElement("script"); s.async = true; s.src = src;
+  document.head.appendChild(s);
+  plausible.init();
 })();
 
 /* ---------- Mark the current page inside the Services menu ---------- */
