@@ -2,7 +2,7 @@
 
 > Meritline Tax Services is an online U.S. tax compliance service for people outside the United States who own a U.S. LLC. It prepares and files Form 5472 with the pro forma Form 1120 for foreign-owned single-member LLCs, state annual reports and state tax returns, Form 7004 extensions, FBAR (FinCEN Form 114), and catch-up filings with reasonable cause statements for missed years. Clients in any country are served fully online by email and WhatsApp, with a fixed written quote before any work begins.
 
-Last updated: 2026-11-18
+Last updated: 2026-11-24
 
 ## Business facts
 
@@ -74,6 +74,7 @@ State fees, government fees and any tax owed are paid separately.
 - [Tax Deadlines 2027: When Are U.S. Taxes Due? A Calendar for Businesses and Individuals](https://meritlinetaxservices.com/blog/us-tax-deadlines-2027.html)
 - [U.S. LLC Tax Glossary for Foreign Owners: 52 Terms Explained in Plain English](https://meritlinetaxservices.com/blog/us-llc-tax-glossary.html): plain-English definitions of 52 terms, from Form 5472 and disregarded entity to ECI, FBAR, and franchise tax
 - [Year-End Form 5472 Checklist: What to Record Before December 31](https://meritlinetaxservices.com/blog/year-end-form-5472-checklist.html): A year-end checklist for foreign-owned LLC owners: what to record before December 31 so your 2026 Form 5472 is complete, accurate, and quick to file
+- [How Much Does Form 5472 Cost? Prices for Foreign-Owned LLCs](https://meritlinetaxservices.com/blog/how-much-does-form-5472-cost.html): Form 5472 filing prices for foreign-owned LLCs: from $200 with no activity, from $250 with activity. Pro forma 1120 included. Fixed written quote first
 
 ## Guides by country of residence
 
